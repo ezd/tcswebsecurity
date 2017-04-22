@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.serviceSecurity</groupId>
-	<artifactId>lab-4-sentence</artifactId>
+	<artifactId>starting</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
