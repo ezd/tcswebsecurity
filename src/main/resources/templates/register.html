@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyemleaf.org">
+<head th:replace="layout/custheader :: custheader">
+</head>
+<head>
+<link rel="stylesheet" th:href="@{/css/customstyle.css}" />
+</head>
+<body>
+	<div class="container">
+		<div th:include="layout/custnavbar :: custnavbar"></div>
+		<div class="jumbotron" style="min-height: 500px">
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3">
+
+					<div class="alert alert-danger alert-dismissable"
+						th:if="${msg != 'success' and msg != null}" role="alert">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-lable="Close">
+							<span aria-hidden="true">X</span>
+						</button>
+						<p th:text="${msg}">Something goes wrong!</p>
+					</div>
+					<div class="alert alert-success alert-dismissable"
+						th:if="${msg}=='success'" role="alert">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-lable="Close">
+							<span aria-hidden="true">X</span>
+						</button>
+						<p>User registered successfully!</p>
+					</div>
+
+					<div class="text-center">
+						<h2>Registration page</h2>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<form th:action="@{/register}" th:object="${user}" th:method="post"
+					class="form-horizontal" id="registrationform" name="registrationform">
+					<input type="hidden" th:field="*{id}" />
+					<div class="form-group">
+						<label for="firstName" th:text="'First Name'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="firstName" name="firstName" th:field="*{firstName}"
+								type="text" class="form-control" />
+						</div>
+
+					</div>
+
+					<div class="form-group">
+						<label for="lastName" th:text="'Last Name'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="lastName" name="lastName" th:field="*{lastName}"
+								type="text" class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="street" th:text="'Street address'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="street" name="street" th:field="*{street}" type="text"
+								class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="zipCode" th:text="'ZIP Code'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="zipCode" name="zipCode" th:field="*{zipCode}"
+								type="text" class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="country" th:text="'Country of birth'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<select id="country" class="form-control selectpicker"
+								name="country" th:field="*{country}"></select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="dateOfBirth" th:text="'Date of birth'"
+							class="col-sm-3 control-label"></label>
+						<div class='input-group date col-sm-7' id='dobdatetimepicker'>
+							<input id="dateOfBirth" name="dateOfBirth"
+								th:field="*{dateOfBirth}" type='text' class="form-control" /> <span
+								class="input-group-addon"> <span
+								class="glyphicon glyphicon-calendar"></span>
+							</span>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="nationality" th:text="Nationality"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7 selectContainer">
+							<select id="nationality" class="form-control selectpicker"
+								name="nationality" th:field="*{nationality}">
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="state" th:text="State" class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<select id="state" class="form-control selectpicker" name="state"
+								th:field="*{state}"></select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="passportNumber" th:text="'Passport number'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="passportNumber" name="passportNumber"
+								th:field="*{passportNumber}" type="text" class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="phone" th:text="'Phone number'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="phone" name="phone" th:field="*{phone}" type="text"
+								class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="username" th:text="'E-mail'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="username" name="username" th:field="*{username}"
+								type="text" class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="password" th:text="Password"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="password" name="password" th:field="*{password}"
+								type="password" class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="repassword" th:text="'Re type password'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="repassword" name="repassword" type="password"
+								class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="regitrationsubmitbtn" type="submit"
+								value="Save change" class="btn btn-primary" />
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<footer th:replace="layout/footer :: footer"></footer>
+		</div>
+	</div>
+	<!-- /container -->
+
+	<!--     IE10 viewport hack for Surface/desktop Windows 8 bug -->
+</body>
+<!-- minDate: new Date(2007, 6, 12)  -->
+<script src="/js/countries.js"></script>
+<script type="text/javascript">
+	$(function() {
+		$('#dobdatetimepicker').datetimepicker({
+			format: moment().format('mm/dd/yyyy'),
+            autoclose: true,
+            todayBtn: true,
+            maxDate: new Date
+		});
+	});
+	populateCountries("nationality", "state");
+	populateCountries("country");
+// 	form validation starts
+		$().ready(function() {
+			$('#registrationform').validate({
+						rules : {
+							firstName : {required: true},
+							lastName : {required: true},
+							street : {required: true},
+							zipCode : {required: true},
+							phone : {required: true},
+							passportNumber : {required: true},
+							state : {selectcheckstate: true},
+							nationality : {selectchecknationality: true},
+							dateOfBirth : {required: true},
+							country : {selectcheckcountry: true},
+							username : {required: true,email: true},
+							password : {required : true,minlength : 6},
+							repassword : {required : true,minlength : 6,equalTo : "#password"}
+						},
+						messages : {
+							firstName : {required: "First name is required"},
+							lastName : {required: "Last name is required"},
+							street : {required: "Street address is required"},
+							zipCode : {required: "ZIP Code is required"},
+							phone : {required: "Phone number is required"},
+							passportNumber : {required: "Passport number is required"},
+							dateOfBirth : {required: "Date of birth is requried"},
+							username : {
+								required : "Please provide your email as user name",
+								email : "Please provide correct email address"
+							},
+							password : {
+								required : "Please provide a password",
+								minlength : "Your password must be at least 6 characters long"
+							},
+							repassword : {
+								required : "Please re type the above password",
+								minlength : "Your password must be at least 6 characters long",
+								equalTo : "Please enter the same password as above"
+							}
+						}
+
+				});
+			});
+		
+	$().ready(function() {
+		jQuery.validator.addMethod('selectcheckcountry', function(value) {
+			return (value != '0');
+		}, "Country is required.");
+		jQuery.validator.addMethod('selectchecknationality', function(value) {
+			return (value != '0');
+		}, "Nationality is required.");
+		jQuery.validator.addMethod('selectcheckstate', function(value) {
+			return (value != '0');
+		}, "State is required.");
+	});
+	// 		form validation ends 
+</script>
+
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyemleaf.org">
+
+<head th:replace="layout/custheader :: custheader">
+</head>
+<body>
+	<div class="container">
+		<div th:include="layout/custnavbar :: custnavbar"></div>
+		<div class="jumbotron" style="height: 500px">
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3">
+					<div class="alert alert-success alert-dismissable"
+						th:if="${emailSent}" role="alert">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-lable="Close">
+							<span aria-hidden="true">X</span>
+						</button>
+						<p>Email send. Please check your email box.</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3">
+					<div class="well ">
+						<div class="text-center">
+							<h2>Login page</h2>
+						</div>
+
+						<form th:action="@{/forgetPassword}" th:method="post">
+
+							<div class="form-group">
+								<label for="_email" th:text="E-mail"></label> 
+								<input id="_email" name="email" type="text" class="form-control" />
+							</div>
+
+							<div class="form-group">
+								<input type="submit" value="Submit" class="btn btn-primary" />
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<footer th:replace="layout/footer :: footer"></footer>
+	</div>
+	<!-- /container -->
+
+	<!--     IE10 viewport hack for Surface/desktop Windows 8 bug -->
+</body>
+</html>
+
+<!-- <form class="form-signin"> -->
+<!--         <h2 class="form-signin-heading">Please sign in</h2> -->
+<!--         <label for="inputEmail" class="sr-only">Email address</label> -->
+<!--         <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus> -->
+<!--         <label for="inputPassword" class="sr-only">Password</label> -->
+<!--         <input type="password" id="inputPassword" class="form-control" placeholder="Password" required> -->
+<!--         <div class="checkbox"> -->
+<!--           <label> -->
+<!--             <input type="checkbox" value="remember-me"> Remember me -->
+<!--           </label> -->
+<!--         </div> -->
+<!--         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button> -->
+<!--       </form> -->

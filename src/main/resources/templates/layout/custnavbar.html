@@ -1,0 +1,50 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<body>
+
+	<div th:fragment="custnavbar">
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed"
+						data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+						aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span> <span
+							class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Project name</a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a th:href="@{/}">Home</a></li>
+						<li><a th:href="@{/publicinfo}">Public Info</a></li>
+						<li th:if="${#authorization?.expression('!isAuthenticated()')}"><a th:href="@{/register}">Register</a></li>
+						<li th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="@{/limited/info}">Limited Info</a></li>
+						<li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/info}">Admin Info</a></li>
+						<li sec:authorize="hasRole('EMPLOYEE')"><a th:href="@{/emp/info}">Employee Info</a></li>
+						<li sec:authorize="hasRole('EMPLOYER')"><a th:href="@{/empr/info}">Employer Info</a></li>
+						<li><a th:href="@{/contactus}">Contact Us</a></li>
+						<li><a th:href="@{/aboutus}">About Us</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li th:if="${#authorization?.expression('isAuthenticated()')}">
+							<form th:action="@{/logout}" method="post" class="navbar-form">
+								<button type="submit" class="btn btn-primary">Logout</button>
+							</form>
+						</li>
+						<li th:if="${#authorization?.expression('!isAuthenticated()')}">
+							<div class="navbar-form">
+								<a th:href="@{/login}" class="btn btn-primary">Login</a>
+							</div>
+
+						</li>
+					</ul>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+			<!--/.container-fluid -->
+		</nav>
+	</div>
+
+</body>
+</html>
