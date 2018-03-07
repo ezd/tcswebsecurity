@@ -43,6 +43,8 @@ public class WebSecurityApplication {
 	@Autowired
 	UserTokenService userTokenService;
 	
+	
+	
 	@Autowired
 	private MailSender mailSender;
 	private SimpleMailMessage msgTemplate;
@@ -71,8 +73,12 @@ public class WebSecurityApplication {
 		
 		User adminUser=new User("biliyala.ezd2@gmail.com", webmasterpassword, "Admin", "AdminLast", "lasColinas", "75039", "Irving", "USA", "12-23-1982", "206-229-1976",true);
 		Set<Role> roles=new HashSet<>();
-		roles.add(adminRole);
-		User savedUser=userRegistrationService.saveUserInfo(adminUser, roles);
+//		roles.add(adminRole);
+//		adminUser.getRoles().add(adminRole);
+//		adminRole.getUsers().add(adminUser);
+		userRegistrationService.saveRole(adminRole);
+		adminUser.setRole(adminRole);
+		User savedUser=userRegistrationService.saveUserInfo(adminUser);
 		//UserToken ut= userTokenService.createToken(savedUser, expirationMiniut);
 		
 		

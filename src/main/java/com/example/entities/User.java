@@ -13,7 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,17 +61,23 @@ public class User implements Serializable,UserDetails {
 	}
 	private boolean enabled;
 	
-	@ManyToMany(fetch=FetchType.EAGER)
-	@JoinTable(name="role_user",joinColumns=@JoinColumn(name="user_id"),inverseJoinColumns=@JoinColumn(name="role_id"))
-	private Set<Role> roles=new HashSet<>();
+//	@ManyToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
+//	@JoinTable(name="role_user",joinColumns=@JoinColumn(name="user_id"),inverseJoinColumns=@JoinColumn(name="role_id"))
+//	private Set<Role> roles=new HashSet<>();
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="Role_id")
+	Role role;
+	@Transient
+	public String userType;
 	
 	
-	public Set<Role> getRoles() {
-		return roles;
+	public String getUserType() {
+		return userType;
 	}
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -173,7 +181,8 @@ public class User implements Serializable,UserDetails {
 //		for(Role r:this.getRoles()){
 //			autorities.add(new Authority(r.getName()));
 //		}
-		this.getRoles().forEach(ur->autorities.add(new Authority(ur.getName())));
+		autorities.add(new Authority(this.role.getName()));
+//		this.getRoles().forEach(ur->autorities.add(new Authority(ur.getName())));
 		return autorities;
 	}
 	@Override
@@ -203,7 +212,13 @@ public class User implements Serializable,UserDetails {
 				+ ", lastName=" + lastName + ", street=" + street + ", zipCode=" + zipCode + ", state=" + state
 				+ ", country=" + country + ", nationality=" + nationality + ", passportNumber=" + passportNumber
 				+ ", dateOfBirth=" + dateOfBirth + ", phone=" + phone + ", userToken=" + userToken + ", enabled="
-				+ enabled + ", roles=" + roles + "]";
+				+ enabled + ", role=" + role + "]";
+	}
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 

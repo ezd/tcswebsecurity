@@ -2,8 +2,8 @@ package com.example.enums;
 
 public enum RoleEnum {
 	
-	EMPLOYEE("EMPLOYEE"),
-	EMPLOYER("EMPLOYER"),
+	BRM("BRM"),
+	SPOC("SPOC"),
 	ADMIN("ADMIN"),
 	USER("USER");
 	

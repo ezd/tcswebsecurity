@@ -26,9 +26,9 @@ public class UserSecurityService implements UserDetailsService {
 			throw new UsernameNotFoundException("User having "+userEmail+" not found");
 		}
 		System.out.println("user is ::::::::::"+user.getFirstName());
-		for(Role r:user.getRoles()){
-			System.out.println("roles"+r.getName());
-		}
+//		for(Role r:user.getRoles()){
+//			System.out.println("roles"+r.getName());
+//		}
 		System.out.println("********************************");
 		for(GrantedAuthority a:user.getAuthorities()){
 			System.out.println("gautorities"+a.getAuthority());

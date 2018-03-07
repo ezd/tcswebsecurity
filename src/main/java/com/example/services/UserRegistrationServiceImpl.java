@@ -1,5 +1,7 @@
 package com.example.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.entities.Role;
 import com.example.entities.User;
+import com.example.enums.RoleEnum;
 import com.example.repository.RoleRepo;
 import com.example.repository.UserRepository;
 
@@ -23,14 +26,32 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 	
 	@Override
 	@Transactional
-	public User saveUserInfo(User userinfo,Set<Role> roles) {
+	public User saveUserInfo(User userinfo) {
 		String pw_hash = BCrypt.hashpw(userinfo.getPassword(), BCrypt.gensalt());
 		userinfo.setPassword(pw_hash);
-		for(Role role:roles){
-			roleRepository.save(role);
-		}
-		userinfo.getRoles().addAll(roles);
+		userinfo.setEnabled(true);
+//		userRegistrationService.saveRole(adminRole);
+//		adminUser.setRole(adminRole);
+//		User savedUser=userRegistrationService.saveUserInfo(adminUser);
 		return userInfoRepository.save(userinfo);
+	}
+	public boolean isRoleSaved(Role role) {
+		List<Role> savedRoles=(List<Role>)roleRepository.findAll();
+		for(Role r:savedRoles) {
+			if(r.getName().equalsIgnoreCase(role.getName())) {
+				return true;
+			}
+		}
+		return false; 
+	}
+
+	private boolean isRoleSaved(List<Role> savedRoles, Role role) {
+		for(Role r:savedRoles) {
+			if(r.getName().equalsIgnoreCase(role.getName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -49,10 +70,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
 	}
 
-	@Override
-	public User getUserByEmail(String userEmail) {
-		return userInfoRepository.findByUsername(userEmail);
-	}
+	
 
 	@Override
 	public boolean isValidUser(Long id) {
@@ -74,6 +92,33 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 	public boolean isUserNameExists(String username) {
 		User user=userInfoRepository.findByUsername(username);
 		return (user!=null);
+	}
+	@Override
+	public Role saveRole(Role role) {
+		return roleRepository.save(role);
+	}
+	@Override
+	public User getUserByEmail(String userEmail) {
+		return userInfoRepository.findByUsername(userEmail);
+	}
+	@Override
+	public Role getRole(String name) {
+		
+		return roleRepository.findByName(name);
+	}
+	@Override
+	public Role getRoleByEmail(String email) {
+		User user=getUserByEmail(email);
+		return user.getRole();
+	}
+	@Override
+	public List<User> getAllUsers() {
+		return (List<User>) userInfoRepository.findAll();
+	}
+	
+	@Override
+	public List<User> getAllUsersByRole(RoleEnum spoc) {
+		return userInfoRepository.findByRoleName(spoc.getRoleName());
 	}
 
 //	@Override

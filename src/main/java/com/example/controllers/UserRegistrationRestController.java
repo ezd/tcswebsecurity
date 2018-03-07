@@ -18,6 +18,25 @@ public class UserRegistrationRestController {
 	@Autowired
 	UserRegistrationService userRegistrationService;
 	
+	@RequestMapping(value="/getUser/{userId}",method=RequestMethod.GET)
+	public @ResponseBody User getUser(@PathVariable("userId") Long userId){
+		User userInfoById = userRegistrationService.getUserInfo(userId);
+		return userInfoById;
+	}
+	
+	@RequestMapping(value="/deleteUser/{userId}",method=RequestMethod.GET)
+	public @ResponseBody String deleteUser(@PathVariable("userId") Long userId){
+		try {
+			userRegistrationService.deletUserInfo(userId);
+			return "successfully deleted";
+		} catch (Exception e) {
+			// TODO: handle exception
+			return "not able deleted";
+		}
+		
+		
+	}
+	
 //	@RequestMapping(value="/saveUser",method=RequestMethod.POST)
 //	public @ResponseBody User saveUser(@RequestBody User userinfo){
 ////		UserInfo userinfo=new UserInfo("Ezedin", "Asseffa", "valley ranch", "75063", "Irving", "USA", "2062291976", "biliyala.ezd2@gmail.com", "password");
@@ -66,23 +85,6 @@ public class UserRegistrationRestController {
 //		}
 //	}
 	
-	@RequestMapping(value="/getUser/{userId}",method=RequestMethod.GET)
-	public @ResponseBody User getUser(@PathVariable("userId") Long userId){
-		User userInfoById = userRegistrationService.getUserInfo(userId);
-		return userInfoById;
-	}
 	
-	@RequestMapping(value="/deleteUser/{userId}",method=RequestMethod.GET)
-	public @ResponseBody String deleteUser(@PathVariable("userId") Long userId){
-		try {
-			userRegistrationService.deletUserInfo(userId);
-			return "successfully deleted";
-		} catch (Exception e) {
-			// TODO: handle exception
-			return "not able deleted";
-		}
-		
-		
-	}
 
 }

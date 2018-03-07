@@ -2,14 +2,17 @@ package com.example.entities;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.example.enums.RoleEnum;
 
@@ -25,8 +28,11 @@ public class Role implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	private String name;
-	@ManyToMany(mappedBy="roles",fetch=FetchType.EAGER)
-	private Set<User> users=new HashSet<>();
+//	@ManyToMany(mappedBy="roles",fetch=FetchType.EAGER,cascade=CascadeType.ALL)
+//	private Set<User> users=new HashSet<>();
+	
+	@OneToMany(mappedBy="role")
+	List<User> users;
 	
 	public Role() {
 		// TODO Auto-generated constructor stub
@@ -54,13 +60,15 @@ public class Role implements Serializable {
 		this.name = name;
 	}
 
-	public Set<User> getUsers() {
+	public List<User> getUsers() {
 		return users;
 	}
 
-	public void setUsers(Set<User> users) {
+	public void setUsers(List<User> users) {
 		this.users = users;
 	}
+
+
 	
 	
 	

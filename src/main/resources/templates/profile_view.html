@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyemleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="layout/custheader :: custheader"/>
+<body>
+	<div class="container">
+		<div th:include="layout/custnavbar :: custnavbar"></div>
+
+
+		<!-- Main component for a primary marketing message or call to action -->
+		<div class="jumbotron" style="height: 500px">
+		<!-- <div th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="@{/profile/add}">Add</a></div>
+	 -->
+	
+	
+	<div class="row">
+	
+		<div class="input-group">
+	<!-- <span th:if="${!(role.name=='SPOC' || role.name=='BRM')}">something</span> -->
+								<span class="input-group-btn">
+								
+									<button th:if="${#authorization?.expression('isAuthenticated()')}" class="btn btn-default" type=""
+										style="height: 32px; margin: 0px;" placement="top"
+										title="Add new"
+										id="add_button"
+										
+										>
+										<span class="glyphicon glyphicon-plus"></span>
+									</button>
+									<button th:if="${#authorization?.expression('isAuthenticated()')}" type="button" class="btn btn-default"
+										style="height: 32px; margin: 0px;" data-toggle="modal"
+										data-target="#alartModal"
+										title="Email alert">
+										<span class="glyphicon glyphicon-bell"></span>
+									</button>
+								</span>
+	
+	
+		</div>
+	</div>
+	<div class="row">
+		<table class="table">
+		  <thead>
+		    <tr>
+		      <th>Vendor</th>
+		      <th>Candidate Name</th>
+		      <th>BRM</th>
+		      <th>SPOC</th>
+		      <th>Status</th>
+		      <th></th>
+		      <th></th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr th:each="candidate:${candidatesList}">
+		      <td th:text="${candidate.vendor}">Mark</td>
+		      <td th:text="${candidate.candidateName}">Otto</td>
+		      <td th:text="${candidate.brm}">@mdo</td>
+		      <td th:text="${candidate.spoc}">@mdo</td>
+		      <td th:text="${candidate.status}">@mdo</td>
+		      <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">View</a></td>
+		      <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">Update Feedback</a></td>
+		      </tr>
+		<!-- <td th:if="${role.name=='SPOC' || role.name=='PMP'}"><a th:href="${ '/profile/feedback' + candidate.id }">Feedback</a></td>
+		  -->     
+		  </tbody>
+		</table>
+		
+	</div>
+</div>
+
+<!-- modal starts here -->
+<div class="modal fade" id="alartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Send email alert</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <form>
+		  <div class="form-group">
+		    <label for="exampleInputEmail1">Email address</label>
+		    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"></input>
+		    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+		  </div>
+		  <div class="form-group">
+		    <label for="feedBack" class="col-sm-3 control-label">Message</label>
+			<textarea rows = "10" cols = "80"  ></textarea>
+		  </div>
+		  <button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- modal ends here -->
+
+		<footer th:replace="layout/footer :: footer"></footer>
+
+	</div>
+
+</body>
+</html>
+<script type="text/javascript">
+$(document).ready(
+		function(){
+			$('#add_button').click(function(){
+				window.location
+				.replace('/profile/add.html');
+			});
+		}
+		);
+
+</script>

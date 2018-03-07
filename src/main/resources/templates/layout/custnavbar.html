@@ -16,15 +16,14 @@
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
-						<li class="active"><a th:href="@{/}">Home</a></li>
-						<li><a th:href="@{/publicinfo}">Public Info</a></li>
+						<li class="active"><a th:href="@{/profile/view}">Home</a></li>
 						<li th:if="${#authorization?.expression('!isAuthenticated()')}"><a th:href="@{/register}">Register</a></li>
-						<li th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="@{/limited/info}">Limited Info</a></li>
-						<li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/info}">Admin Info</a></li>
-						<li sec:authorize="hasRole('EMPLOYEE')"><a th:href="@{/emp/info}">Employee Info</a></li>
-						<li sec:authorize="hasRole('EMPLOYER')"><a th:href="@{/empr/info}">Employer Info</a></li>
-						<li><a th:href="@{/contactus}">Contact Us</a></li>
-						<li><a th:href="@{/aboutus}">About Us</a></li>
+						<li th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="@{/profile/view}">Profiles List</a></li>
+						<li th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="@{/profile/add}">Register Profile</a></li>
+						<li th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="@{/uploadExcelFile}">Upload Profiles</a></li>
+						
+						<li sec:authorize="hasRole('SPOC')"><a th:href="@{/SPOC/info}">SPOC Info</a></li>
+						<li sec:authorize="hasRole('PMP')"><a th:href="@{/PMP/info}">PMP Info</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li th:if="${#authorization?.expression('isAuthenticated()')}">

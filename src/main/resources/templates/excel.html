@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyemleaf.org">
+<head th:include="layout/custheader :: custheader" />
+<body>
+	<div class="container">
+		<div th:include="layout/custnavbar :: custnavbar"></div>
+		<div class="jumbotron" style="height: 500px">
+			<!-- <p th:text="${_csrf.parameterName}"></p>
+		<p th:text="${_csrf.token}"></p> -->
+
+			<form class="form-inline" method="post" enctype="multipart/form-data"
+				th:action="@{'/uploadExcelFile'}">
+				<input type="file" class="form-control mb-2 mr-sm-2 mb-sm-0"
+					id="inlineFormInput" name="file" accept=".xls,.xlsx" />
+				<button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
+			</form>
+
+
+			<div th:if="${candidates!=null}">
+				<div class="row">
+					<form th:action="@{/addListOfProfiles}" th:method="post"
+						class="form-inline" id="registrationform"
+						name="registrationform" style="float: right" > 
+							<div class="form-group">
+								<label id="saveSatatus" class="control-label" th:text="${uploadStatus}"></label>
+								<input id="regitrationsubmitbtn" type="submit"
+										value="Save all" class="btn btn-primary" />
+							</div>
+					</form>
+				</div>
+				<div class="row">
+					<table id="myTableId" class="table">
+						<thead>
+							<tr>
+								<th>Vendor</th>
+								<th>Candidate Name</th>
+								<th>Skills</th>
+								<th>BRM</th>
+								<th>SPOC</th>
+								<th>Date</th>
+								<th>Location</th>
+								<th>Special Skills</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="candidate : ${candidates}">
+								<td th:text="${candidate?.vendor}">Kebede</td>
+								<td th:text="${candidate?.candidate_name}">Kebede</td>
+								<td th:text="${candidate?.Skills}">Kebede</td>
+								<td th:text="${candidate?.BRM}">Kebede</td>
+								<td th:text="${candidate?.SPOC}">Kebede</td>
+								<td th:text="${candidate?.date}">Kebede</td>
+								<td th:text="${candidate?.location}">Kebede</td>
+								<td th:text="${candidate?.specialSkills}">Kebede</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+
+			</div>
+
+		</div>
+		<footer th:replace="layout/footer :: footer"></footer>
+
+	</div>
+
+</body>
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    var listOfProfileToSave = /*[[${candidates}]]*/ {};
+
+/*]]>*/
+</script>
+<script>
+$(document)
+			.ready(
+					function() {
+						$('#saveSatatus').fadeOut(1500);
+						console.log('coming.................');
+						console.log('form before submited');
+						console.log(listOfProfileToSave);
+						console.log(JSON.stringify(listOfProfileToSave));
+						$('#registrationform')
+						.submit(
+								function(event) {
+									event.preventDefault();
+									console.log('form submited');
+									console.log(listOfProfileToSave);
+									
+									$.ajax({
+										type : 'POST',
+										url : '/addListOfProfiles',
+										contentType: "application/json",
+										dataType : 'json',
+										data : JSON.stringify(listOfProfileToSave),
+										success : function(data) {
+											console.log("success",data);
+											/* msg */
+											$("#saveSatatus").text(data.msg)
+											$('#saveSatatus').fadeIn();
+											$('#saveSatatus').fadeOut(1500);
+										},
+										error : function(ts) {
+											console.log("error",ts);
+											$('#saveSatatus').fadeIn();
+											$('#saveSatatus').fadeOut(1500);
+										}
+									});
+								});
+						
+						
+					});
+
+
+</script>
+</html>

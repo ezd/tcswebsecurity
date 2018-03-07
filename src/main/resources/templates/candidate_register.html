@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thyemleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="layout/custheader :: custheader">
+</head>
+<head>
+<link rel="stylesheet" th:href="@{/css/customstyle.css}" />
+</head>
+<body>
+	<div class="container">
+		<div th:include="layout/custnavbar :: custnavbar"></div>
+		<div class="jumbotron" style="min-height: 500px">
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3">
+
+					<div class="alert alert-danger alert-dismissable"
+						th:if="${msg != 'success' and msg != null}" role="alert">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-lable="Close">
+							<span aria-hidden="true">X</span>
+						</button>
+						<p th:text="${msg}">Something goes wrong!</p>
+					</div>
+					<div class="alert alert-success alert-dismissable"
+						th:if="${msg}=='success'" role="alert">
+						<button type="button" class="close" data-dismiss="alert"
+							aria-lable="Close">
+							<span aria-hidden="true">X</span>
+						</button>
+						<p>User registered successfully!</p>
+					</div>
+
+					<div class="text-center">
+						<h2>Registration page</h2>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<form th:action="@{/profile/add}" th:object="${candidate}"
+					th:method="post" class="form-horizontal"
+					id="candidateRegistrationform" name="candidateRegistrationform">
+					<input type="hidden" th:field="*{id}" />
+					<div class="form-group">
+						<label for="vendor" th:text="'Vendor'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="vendor" name="vendor" th:field="*{vendor}" type="text"
+								class="form-control" />
+						</div>
+
+					</div>
+
+					<div class="form-group">
+						<label for="candidateName" th:text="'Candidate Name'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="candidateName" name="candidateName"
+								th:field="*{candidateName}" type="text" class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="skills" th:text="'Skills'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="skills" name="skills" th:field="*{Skills}" type="text"
+								class="form-control" />
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="BRM" th:text="'BRM'" class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<select id="BRM" name="BRM"
+									th:field="*{brm}" class="form-control">
+								<option th:each="brmuser : ${brmusers}"
+									th:value="${brmuser.username}"
+									th:utext="${brmuser.lastName+ ' ' + brmuser.firstName}" />
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="SPOC" th:text="'SPOC'" class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<select id="SPOC" name="SPOC"
+									th:field="*{spoc}" class="form-control">
+								<option th:each="spocuser : ${spocusers}"
+									th:value="${spocuser.username}"
+									th:utext="${spocuser.lastName+ ' ' + spocuser.firstName}" />
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="date" th:text="'Date'" class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="date" name="date" th:field="*{date}" type="text"
+								class="form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="location" th:text="'Location'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="location" name="location" th:field="*{location}"
+								type="text" class="form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="anySpecialSkill" th:text="'Any Special Skill'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="anySpecialSkill" name="anySpecialSkill"
+								th:field="*{anySpecialSkill}" type="text" class="form-control" />
+						</div>
+					</div>
+
+					<div th:if="${role.name=='SPOC' || role.name=='BRM'}"
+						class="form-group">
+						<label for="status" th:text="'Status'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<select id="statusType" class="form-control selectpicker" name="statusType"
+								th:field="*{status}">
+								<option th:text="'-Select status-'" th:value="'Not initiated'"></option>
+								<option th:text="Accepted" th:value="Accepted"></option>
+								<option th:text="Contacted" th:value="Contacted"></option>
+								<option th:text="Interviewed" th:value="Interviewed"></option>
+								<option th:text="Rejected" th:value="Rejected"></option>
+								<option th:text="Sellected" th:value="Sellected"></option>
+							</select>
+
+						</div>
+					</div>
+					<div th:if="${!(role.name=='SPOC' || role.name=='BRM')}"
+						class="form-group">
+						<label for="status" th:text="'status'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<p th:text="${candidate.status}"></p>
+						</div>
+					</div>
+
+					<div th:if="${role.name=='SPOC' || role.name=='BRM'}"
+						class="form-group">
+						<label for="feedBack" th:text="'FeedBack'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<textarea rows="10" cols="80" th:field="*{feedBack}">... </textarea>
+
+						</div>
+					</div>
+					<div th:if="${!(role.name=='SPOC' || role.name=='BRM')}"
+						class="form-group">
+						<label for="feedBack" th:text="'FeedBack'"
+							class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<p th:text="${candidate.feedBack}"></p>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label"></label>
+						<div class="col-sm-7">
+							<input id="candidatesubmitbtn" type="submit" value="Save"
+								class="btn btn-primary" />
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<footer th:replace="layout/footer :: footer"></footer>
+		</div>
+	</div>
+	<!-- /container -->
+
+	<!--     IE10 viewport hack for Surface/desktop Windows 8 bug -->
+</body>
+<!-- minDate: new Date(2007, 6, 12)  -->
+<script src="/js/countries.js"></script>
+<script type="text/javascript">
+
+	// 	form validation starts
+	$().ready(function() {
+		$('#candidateRegistrationform').validate({
+			rules : {
+				candidateName : {
+					required : true
+				},
+				skills : {
+					required : true
+				},
+				BRM : {
+					required : true
+				}
+			},
+			messages : 
+				candidateName : {
+					required : "Candidate name is required"
+				},
+				skills : {
+					required : "Skills are required"
+				},
+				BRM : {
+					required : "BRM is required"
+				},
+			}
+
+		});
+	});
+
+	// 		form validation ends
+</script>
+
+</html>

@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 }
 	
 	private static final String[] RESOURCES = {
-			"/css/**","/js/**","/","/webjars/**","/login","/publicinfo","/contactus","/aboutus","/saveUser","/forgetPassword"
+			"/css/**","/js/**","/","/webjars/**","/login","/saveUser","/forgetPassword"
 			,"/updatePassword","/register"
 	};
 	
@@ -34,37 +34,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
         .authorizeRequests()
         	.antMatchers(RESOURCES).permitAll()
-        	.antMatchers("/emp/**").hasAnyRole("EMPLOYEE","ADMIN")
-        	.antMatchers("/empr/**").hasAnyRole("EMPLOYER","ADMIN")
         	.antMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated()
             .and().exceptionHandling().accessDeniedPage("/accessdenide")
         .and()
         .formLogin()
-            .loginPage("/login").defaultSuccessUrl("/limited/info")
+            .loginPage("/login").defaultSuccessUrl("/profile/view")
             .and()
 			.logout().invalidateHttpSession(true).permitAll()
-			.and();
+			.and().csrf().disable();
 		
-//		http
-//			.authorizeRequests()
-//				.antMatchers(RESOURCES).permitAll()
-//		.and()
-//			.formLogin().loginPage("/login").defaultSuccessUrl("/limited/info")
-//		.and()
-//			.logout().invalidateHttpSession(true).logoutUrl("/logout").logoutSuccessUrl("/");
 	}
 	
 	@Autowired
 	protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
-		//		auth.inMemoryAuthentication()
-//		.withUser("emp").password("emp").roles("EMPLOYEE")
-//		.and()
-//		.withUser("empr").password("empr").roles("EMPLOYER")
-//		.and()
-//		.withUser("user").password("user").roles("USER")
-//		.and()
-//		.withUser("admin").password("admin").roles("ADMIN");
 		auth
         .userDetailsService(uSecurityService).passwordEncoder(mypasswordEncoder());
 	}

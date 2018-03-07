@@ -9,18 +9,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.example.entities.CandidateProfile;
 import com.example.entities.User;
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface CandidateProfileRepository extends CrudRepository<CandidateProfile, Long> {
 
-	User findByUsername(String username);
-//	User findByFirstName(String firstName);
-	
-	@Modifying
-	@Query("UPDATE User u SET u.password=:password WHERE u.id=:userId")
-	void updateUserPassword(@Param("userId") Long userId, @Param("") String password);
-
-	List<User> findByRoleName(String roleName);
-
+	List<CandidateProfile> findByBrm(String brm);
+	List<CandidateProfile> findBySpoc(String spoc);
 	
 }

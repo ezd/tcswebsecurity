@@ -33,15 +33,28 @@ public class RegistrationController {
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public String postRegister(Model model, User user) {
 		System.out.println(user.toString());
-		System.out.println("========================");
-
-		Role userRole = new Role(RoleEnum.USER);
-		Set<Role> roles = new HashSet<>();
-		roles.add(userRole);
+		System.out.println("========================"+user.userType);
+		Role role=null;
+		if(user!=null && user.userType.equalsIgnoreCase("SPOC")) {
+			role = new Role(RoleEnum.SPOC);
+			
+		}else if(user!=null && user.userType.equalsIgnoreCase("BRM")) {
+			role = new Role(RoleEnum.BRM);
+		}else {
+			role=new Role(RoleEnum.USER);
+		}
+		
 		if (userRegistrationService.isUserNameExists(user.getUsername())) {
 			model.addAttribute("msg", "Email address " + user.getUsername() + " already in use. Try other Email.");
 		} else {
-			User savedUser=userRegistrationService.saveUserInfo(user, roles);
+			Role exisitingRole=userRegistrationService.getRole(role.getName());
+			if(exisitingRole==null) {
+				Role savedRole=userRegistrationService.saveRole(role);
+				user.setRole(savedRole);
+			}else {
+				user.setRole(exisitingRole);
+			}
+			User savedUser=userRegistrationService.saveUserInfo(user);
 			if (null == savedUser) {
 				model.addAttribute("msg", "Something goes wrong. Unable to save.");
 			} else {
@@ -49,7 +62,7 @@ public class RegistrationController {
 				Authentication authentication = new UsernamePasswordAuthenticationToken(user, null,
 						user.getAuthorities());
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-				return "redirect:/profile/" + savedUser.getId();
+				return "redirect:/profile/view";
 			}
 		}
 		model.addAttribute("user", user);
@@ -57,16 +70,16 @@ public class RegistrationController {
 		return "register";
 	}
 
-	@RequestMapping(value = "/profile/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/userprofile/{id}", method = RequestMethod.GET)
 	public String getProfile(Model model,Principal principal,@PathVariable("id") Long sendId) {
 		if(principal!=null){
 			String username=principal.getName();
 			User backendUser=userRegistrationService.getUserByEmail(username);
 			if(sendId!=backendUser.getId()){
-				return "redirect:/limited/info";
+				return "redirect:/";
 			}else{
 				model.addAttribute("user", backendUser);
-				return "profile";
+				return "userprofile";
 			}
 			
 		}else{

@@ -7,4 +7,6 @@ import com.example.entities.Role;
 @Repository
 public interface RoleRepo extends CrudRepository<Role, Long> {
 
+	Role findByName(String name);
+
 }
