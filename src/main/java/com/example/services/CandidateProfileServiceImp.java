@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.entities.CandidateProfile;
+import com.example.entities.StatusChange;
 import com.example.entities.excel.CandidateDto;
 import com.example.entities.excel.ProfilesToSave;
 import com.example.repository.CandidateProfileRepository;
+import com.example.repository.ChangestatusRepo;
 
 
 @Service
@@ -17,6 +19,9 @@ public class CandidateProfileServiceImp implements CandiateProfileService {
 
 	@Autowired
 	CandidateProfileRepository candidateProfileRepository;
+	
+	@Autowired
+	ChangestatusRepo changeStatrusRepo;
 	
 	@Override
 	public List<CandidateProfile> getAllProfiles() {
@@ -68,6 +73,18 @@ public class CandidateProfileServiceImp implements CandiateProfileService {
 	@Override
 	public List<CandidateProfile> getProfilesBySPOC(String name) {
 		return candidateProfileRepository.findBySpoc(name);
+	}
+
+	@Override
+	public StatusChange saveChangeHistory(StatusChange statusChange) {
+		return changeStatrusRepo.save(statusChange);
+		
+	}
+
+	@Override
+	public List<StatusChange> getStatusChanges(CandidateProfile profile) {
+		// TODO Auto-generated method stub
+		return changeStatrusRepo.findByCandidateProfile(profile);
 	}
 
 }

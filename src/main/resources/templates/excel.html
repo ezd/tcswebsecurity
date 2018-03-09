@@ -4,7 +4,7 @@
 <body>
 	<div class="container">
 		<div th:include="layout/custnavbar :: custnavbar"></div>
-		<div class="jumbotron" style="height: 500px">
+		<div class="jumbotron" style="min-height: 500px">
 			<!-- <p th:text="${_csrf.parameterName}"></p>
 		<p th:text="${_csrf.token}"></p> -->
 
@@ -28,7 +28,7 @@
 							</div>
 					</form>
 				</div>
-				<div class="row">
+				<div class="row" style="overflow: scroll;">
 					<table id="myTableId" class="table">
 						<thead>
 							<tr>
@@ -77,7 +77,6 @@
 $(document)
 			.ready(
 					function() {
-						$('#saveSatatus').fadeOut(1500);
 						console.log('coming.................');
 						console.log('form before submited');
 						console.log(listOfProfileToSave);
@@ -99,13 +98,10 @@ $(document)
 											console.log("success",data);
 											/* msg */
 											$("#saveSatatus").text(data.msg)
-											$('#saveSatatus').fadeIn();
-											$('#saveSatatus').fadeOut(1500);
 										},
 										error : function(ts) {
 											console.log("error",ts);
-											$('#saveSatatus').fadeIn();
-											$('#saveSatatus').fadeOut(1500);
+											$("#saveSatatus").text("Error happend!");
 										}
 									});
 								});

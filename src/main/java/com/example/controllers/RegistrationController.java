@@ -26,6 +26,10 @@ public class RegistrationController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String getRegister(Model model) {
+		Role role=new Role();
+		role.setName("");
+		model.addAttribute("role", role);
+		
 		model.addAttribute("user", new User());
 		return "register";
 	}
@@ -72,6 +76,10 @@ public class RegistrationController {
 
 	@RequestMapping(value = "/userprofile/{id}", method = RequestMethod.GET)
 	public String getProfile(Model model,Principal principal,@PathVariable("id") Long sendId) {
+		Role role=new Role();
+		role.setName("");
+		model.addAttribute("role", role);
+		
 		if(principal!=null){
 			String username=principal.getName();
 			User backendUser=userRegistrationService.getUserByEmail(username);

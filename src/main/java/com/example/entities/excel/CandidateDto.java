@@ -1,5 +1,7 @@
 package com.example.entities.excel;
 
+import javax.persistence.Transient;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CandidateDto {
@@ -22,6 +24,7 @@ private String location;
 private String specialSkills;
 @JsonProperty(value="team")
 private String team;
+
 public String getTeam() {
 	return team;
 }

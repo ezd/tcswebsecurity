@@ -1,6 +1,8 @@
 package com.example.controllers;
 
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entities.CandidateProfile;
 import com.example.entities.Role;
+import com.example.entities.StatusChange;
 import com.example.entities.User;
 import com.example.enums.RoleEnum;
 import com.example.services.CandiateProfileService;
+import com.example.services.CandidateProfileServiceImp;
 import com.example.services.UserRegistrationService;
+
+
 
 @Controller
 public class AccountProfile {
@@ -37,11 +43,14 @@ public class AccountProfile {
 	
 	@RequestMapping("/profile/view")
 	public String getCandidateProfile(Model model,Principal p){
-		
-
-		Role role=userRegistrationService.getRoleByEmail(p.getName());
+		Role role=new Role();
+		if(p!=null) {
+		role=userRegistrationService.getRoleByEmail(p.getName());
+		}else {
+			role.setName("");
+		}
+		System.out.println("role is:"+role.getName());
 		model.addAttribute("role", role);
-		
 		List<CandidateProfile> candidatesList=null;
 		if(role.getName().equalsIgnoreCase(RoleEnum.BRM.getRoleName())) {
 			candidatesList=candiateProfileService.getProfilesByBRM(p.getName());
@@ -61,7 +70,13 @@ public class AccountProfile {
 	@RequestMapping(value="/profile/feedback/{candidateId}",method = RequestMethod.GET)
 	public String updateViewCandidateProfile(Model model,@PathVariable("candidateId") Long candidateId,Principal p){
 		
-		Role role=userRegistrationService.getRoleByEmail(p.getName());
+		Role role=new Role();
+		if(p!=null) {
+		role=userRegistrationService.getRoleByEmail(p.getName());
+		}else {
+			role.setName("");
+		}
+		System.out.println("role is:"+role.getName());
 		model.addAttribute("role", role);
 		CandidateProfile  candidateProfile=candiateProfileService.getCandidateProfile(candidateId);
 		model.addAttribute("candidate", candidateProfile);
@@ -69,7 +84,13 @@ public class AccountProfile {
 	}
 	@RequestMapping(value="/profile/{candidateId}",method = RequestMethod.GET)
 	public String viewCandidateProfile(Model model,Principal p,@PathVariable("candidateId") Long candidateId){
-		Role role=userRegistrationService.getRoleByEmail(p.getName());
+		Role role=new Role();
+		if(p!=null) {
+		role=userRegistrationService.getRoleByEmail(p.getName());
+		}else {
+			role.setName("");
+		}
+		System.out.println("role is:"+role.getName());
 		model.addAttribute("role", role);
 		
 		List<User> spocusers=userRegistrationService.getAllUsersByRole(RoleEnum.SPOC);
@@ -80,34 +101,75 @@ public class AccountProfile {
 		System.out.println("brmssuer count is:"+brmusers.size());
 		
 		CandidateProfile  candidateProfile=candiateProfileService.getCandidateProfile(candidateId);
+		candidateProfile.setOldStatus(candidateProfile.getStatus());
 		model.addAttribute("candidate", candidateProfile);
 		return CANDIDATE_REGISTER;
 	}
 
 	@RequestMapping(value="/profile/add",method = RequestMethod.GET)
 	public String addCandidateProfile(Model model,Principal p){
-		Role role=userRegistrationService.getRoleByEmail(p.getName());
+		Role role=new Role();
+		if(p!=null) {
+		role=userRegistrationService.getRoleByEmail(p.getName());
+		}else {
+			role.setName("");
+		}
+		System.out.println("role is:"+role.getName());
+		model.addAttribute("role", role);
+//		Role role=userRegistrationService.getRoleByEmail(p.getName());
 		List<User> spocusers=userRegistrationService.getAllUsersByRole(RoleEnum.SPOC);
 		model.addAttribute("spocusers", spocusers);
 		System.out.println("spocsuers count is:"+spocusers.size());
 		List<User> brmusers=userRegistrationService.getAllUsersByRole(RoleEnum.BRM);
 		model.addAttribute("brmusers", brmusers);
 		System.out.println("brmssuer count is:"+brmusers.size());
-		model.addAttribute("role", role);
+//		model.addAttribute("role", role);
+		
 		model.addAttribute("candidate", new CandidateProfile());
 		return CANDIDATE_REGISTER;
 	}
 	
 	@RequestMapping(value="/profile/add",method = RequestMethod.POST)
 	public String addCandidateProfilePost(Model model,Principal p,CandidateProfile candidateProfile){
-		Role role=userRegistrationService.getRoleByEmail(p.getName());
+		
+		System.out.println("The status is changed in save: to "+candidateProfile.getStatus()+" from "+ candidateProfile.getOldStatus());
+		Role role=new Role();
+		
+		if(p!=null) {
+		role=userRegistrationService.getRoleByEmail(p.getName());
+		}else {
+			role.setName("");
+		}
+		System.out.println("role is:"+role.getName());
 		model.addAttribute("role", role);
+		
+		//history
+		
+		
+		
 		CandidateProfile savedProfile=candiateProfileService.saveCandidate(candidateProfile);
+		if(!candidateProfile.getOldStatus().equalsIgnoreCase(candidateProfile.getStatus())) {
+			StatusChange statusChange=new StatusChange();
+			statusChange.setChangedBy(p.getName());
+			SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
+			statusChange.setDate(sdf.format(new Date()));
+			statusChange.setChangedFrom(candidateProfile.getOldStatus());
+			statusChange.setChangedTo(candidateProfile.getStatus());
+			statusChange.setCandidateProfile(savedProfile);
+			candiateProfileService.saveChangeHistory(statusChange);
+			System.out.println("***************************history saved");
+			List<StatusChange> history=candiateProfileService.getStatusChanges(savedProfile);
+			System.out.println("***************************"+history.size()+" history found");
+			model.addAttribute("history", null);
+			
+//			candidateProfile.getStatusChanges().add(statusChange);
+		}
 		if (null == savedProfile) {
 			model.addAttribute("msg", "Something goes wrong. Unable to save.");
 		} else {
 			return "redirect:/profile/view";
 		}
+		candidateProfile.setOldStatus(candidateProfile.getStatus());
 		model.addAttribute("candidate", candidateProfile);
 		return CANDIDATE_REGISTER;
 	}

@@ -72,13 +72,20 @@ public class WebSecurityApplication {
 		Role adminRole=new Role(RoleEnum.ADMIN);
 		
 		User adminUser=new User("biliyala.ezd2@gmail.com", webmasterpassword, "Admin", "AdminLast", "lasColinas", "75039", "Irving", "USA", "12-23-1982", "206-229-1976",true);
-		Set<Role> roles=new HashSet<>();
+		User userUser=new User("user@gmail.com", "123456", "kebede", "Tesema", "lasColinas", "75039", "Irving", "USA", "12-23-1982", "206-229-1976",true);
+//		Set<Role> roles=new HashSet<>();
 //		roles.add(adminRole);
 //		adminUser.getRoles().add(adminRole);
 //		adminRole.getUsers().add(adminUser);
 		userRegistrationService.saveRole(adminRole);
 		adminUser.setRole(adminRole);
 		User savedUser=userRegistrationService.saveUserInfo(adminUser);
+
+		Role userRole=new Role(RoleEnum.USER);
+		userUser.setRole(userRole);
+		userRegistrationService.saveRole(userRole);
+		
+		User savedUser2=userRegistrationService.saveUserInfo(userUser);
 		//UserToken ut= userTokenService.createToken(savedUser, expirationMiniut);
 		
 		

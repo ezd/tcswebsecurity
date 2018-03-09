@@ -73,9 +73,10 @@
 						<div class="col-sm-7">
 							<select id="BRM" name="BRM"
 									th:field="*{brm}" class="form-control">
+									<option th:value="null" th:text="'Sellect BRM'"></option>
 								<option th:each="brmuser : ${brmusers}"
 									th:value="${brmuser.username}"
-									th:utext="${brmuser.lastName+ ' ' + brmuser.firstName}" />
+									th:text="${brmuser.lastName+ ' ' + brmuser.firstName}" />
 							</select>
 						</div>
 					</div>
@@ -84,6 +85,7 @@
 						<div class="col-sm-7">
 							<select id="SPOC" name="SPOC"
 									th:field="*{spoc}" class="form-control">
+								<option th:value="null" th:text="'Sellect SPOC'"></option>
 								<option th:each="spocuser : ${spocusers}"
 									th:value="${spocuser.username}"
 									th:utext="${spocuser.lastName+ ' ' + spocuser.firstName}" />
@@ -115,34 +117,34 @@
 						</div>
 					</div>
 
-					<div th:if="${role.name=='SPOC' || role.name=='BRM'}"
-						class="form-group">
+					<div class="form-group">
 						<label for="status" th:text="'Status'"
 							class="col-sm-3 control-label"></label>
 						<div class="col-sm-7">
 							<select id="statusType" class="form-control selectpicker" name="statusType"
 								th:field="*{status}">
-								<option th:text="'-Select status-'" th:value="'Not initiated'"></option>
+								<option th:text="'-Select status-'" th:value="'New initiated'"></option>
 								<option th:text="Accepted" th:value="Accepted"></option>
 								<option th:text="Contacted" th:value="Contacted"></option>
 								<option th:text="Interviewed" th:value="Interviewed"></option>
 								<option th:text="Rejected" th:value="Rejected"></option>
 								<option th:text="Sellected" th:value="Sellected"></option>
 							</select>
+							<input id="anySpecialSkill" name="anySpecialSkill"
+								th:field="*{oldStatus}" type="hidden"  />
 
 						</div>
 					</div>
-					<div th:if="${!(role.name=='SPOC' || role.name=='BRM')}"
+					<!-- <div th:if="${!(role.name=='SPOC' || role.name=='BRM')}"
 						class="form-group">
 						<label for="status" th:text="'status'"
 							class="col-sm-3 control-label"></label>
 						<div class="col-sm-7">
 							<p th:text="${candidate.status}"></p>
 						</div>
-					</div>
+					</div> -->
 
-					<div th:if="${role.name=='SPOC' || role.name=='BRM'}"
-						class="form-group">
+					<div class="form-group">
 						<label for="feedBack" th:text="'FeedBack'"
 							class="col-sm-3 control-label"></label>
 						<div class="col-sm-7">
@@ -150,14 +152,14 @@
 
 						</div>
 					</div>
-					<div th:if="${!(role.name=='SPOC' || role.name=='BRM')}"
+					<!-- <div th:if="${!(role.name=='SPOC' || role.name=='BRM')}"
 						class="form-group">
 						<label for="feedBack" th:text="'FeedBack'"
 							class="col-sm-3 control-label"></label>
 						<div class="col-sm-7">
 							<p th:text="${candidate.feedBack}"></p>
 						</div>
-					</div>
+					</div> -->
 					<div class="form-group">
 						<label class="col-sm-3 control-label"></label>
 						<div class="col-sm-7">

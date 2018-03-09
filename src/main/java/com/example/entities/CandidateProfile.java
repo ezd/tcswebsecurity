@@ -1,11 +1,18 @@
 package com.example.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class CandidateProfile {
@@ -21,11 +28,32 @@ public class CandidateProfile {
 	String team;
 	String date;
 	String status;
+
+	public String getOldStatus() {
+		return oldStatus;
+	}
+
+	public void setOldStatus(String oldStatus) {
+		this.oldStatus = oldStatus;
+	}
+
+	public List<StatusChange> getStatusChanges() {
+		return statusChanges;
+	}
+
+	public void setStatusChanges(List<StatusChange> statusChanges) {
+		this.statusChanges = statusChanges;
+	}
+
+	@Transient
+	String oldStatus;
+
 	String location;
 	String anySpecialSkill;
 	String feedBack;
 
-	
+	@OneToMany(mappedBy = "candidateProfile", fetch = FetchType.EAGER)
+	List<StatusChange> statusChanges=new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -58,8 +86,6 @@ public class CandidateProfile {
 	public void setSkills(String skills) {
 		this.skills = skills;
 	}
-
-	
 
 	public String getTeam() {
 		return team;
@@ -124,5 +150,7 @@ public class CandidateProfile {
 	public void setFeedBack(String feedBack) {
 		this.feedBack = feedBack;
 	}
+
+	
 
 }

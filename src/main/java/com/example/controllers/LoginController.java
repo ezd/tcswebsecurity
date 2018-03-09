@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.entities.Role;
 import com.example.entities.User;
 import com.example.entities.UserToken;
 import com.example.services.UserRegistrationService;
@@ -34,17 +35,29 @@ public class LoginController {
 	int expirationMiniut;
 	
 	@RequestMapping("/login")
-	public String getLogin(){
+	public String getLogin(Model model){
+		Role role=new Role();
+		role.setName("");
+		model.addAttribute("role", role);
 		return "login";
 	}
 	@RequestMapping(value="/forgetPassword", method=RequestMethod.GET)
 	public String forgetPassword(Model model,User user){
 		System.out.println("come to the get");
+		Role role=new Role();
+		role.setName("");
+		model.addAttribute("role", role);
+		
 		return "emailForm";
 	}
 	
 	@RequestMapping(value="/updatePassword",method=RequestMethod.GET)
 	public String updatePassword(Model model,@RequestParam("id") Long id,@RequestParam("token") String token){
+		
+		Role role=new Role();
+		role.setName("");
+		model.addAttribute("role", role);
+		
 		boolean isValidUser=userRegistrationService.isValidUser(id);
 		if(!isValidUser){
 			model.addAttribute("urlmsg","Unregisterd User.");
@@ -61,6 +74,10 @@ public class LoginController {
 	}
 	@RequestMapping(value="/updatePassword",method=RequestMethod.POST)
 	public String updatePasswordPost(Model model,@RequestParam("userId") Long userId,@RequestParam("password") String newPassword){
+		Role role=new Role();
+		role.setName("");
+		model.addAttribute("role", role);
+		
 		System.out.println("the new password is:"+newPassword);
 		if(userRegistrationService.updateUserPassword(userId,newPassword)){
 			model.addAttribute("updatemsg", "success");
@@ -75,6 +92,10 @@ public class LoginController {
 	
 	@RequestMapping(value="/forgetPassword", method=RequestMethod.POST)
 	public String forgetPasswordSave(HttpServletRequest request,@RequestParam("email") String userEmail,Model model){
+		Role role=new Role();
+		role.setName("");
+		model.addAttribute("role", role);
+		
 		User user=userRegistrationService.getUserByEmail(userEmail);
 		if(null!=user){
 			UserToken ut=userTokenService.createToken(user, expirationMiniut);
@@ -91,7 +112,11 @@ public class LoginController {
 	}
 	
 	@RequestMapping({"/","publicinfo"})
-	public String getIndex(){
+	public String getIndex(Model model){
+		Role role=new Role();
+		role.setName("");
+		model.addAttribute("role", role);
+		
 		return "index";
 	}
 	

@@ -19,8 +19,8 @@
 						<li class="active"><a th:href="@{/profile/view}">Home</a></li>
 						<li th:if="${#authorization?.expression('!isAuthenticated()')}"><a th:href="@{/register}">Register</a></li>
 						<li th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="@{/profile/view}">Profiles List</a></li>
-						<li th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="@{/profile/add}">Register Profile</a></li>
-						<li th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="@{/uploadExcelFile}">Upload Profiles</a></li>
+						<li th:if="${role!='USER'?role.name=='USER':false}"><a th:href="@{/profile/add}">Register Profile</a></li>
+						<li th:if="${role!='USER'?role.name=='USER':false}"><a th:href="@{/uploadExcelFile}">Upload Profiles</a></li>
 						
 						<li sec:authorize="hasRole('SPOC')"><a th:href="@{/SPOC/info}">SPOC Info</a></li>
 						<li sec:authorize="hasRole('PMP')"><a th:href="@{/PMP/info}">PMP Info</a></li>

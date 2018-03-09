@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.entities.Role;
 import com.example.entities.excel.AjaxResponseBody;
 import com.example.entities.excel.CandidateDto;
 import com.example.entities.excel.ExcelPOIHelper;
@@ -31,6 +33,7 @@ import com.example.entities.excel.MyCell;
 import com.example.entities.excel.ProfilesToSave;
 import com.example.services.CandiateProfileService;
 import com.example.services.CandidateProfileServiceImp;
+import com.example.services.UserRegistrationService;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -48,16 +51,33 @@ public class ExcelController {
 	@Autowired
 	private CandiateProfileService candidateProfileService;
 
+	@Autowired
+	UserRegistrationService userRegistrationService;
+	
 	@GetMapping("/uploadExcelFile")
-	public String uploadPage(Model model) {
+	public String uploadPage(Model model,Principal p) {
 		// List<CandidateDto> candidates = null;
+		Role role=new Role();
+		if(p!=null) {
+		role=userRegistrationService.getRoleByEmail(p.getName());
+		}else {
+			role.setName("");
+		}
+		model.addAttribute("role", role);
 		model.addAttribute("candidates", null);
 		model.addAttribute("uploadStatus", "start");
 		return "excel";
 	}
 
 	@PostMapping("/uploadExcelFile")
-	public String uploadFile(Model model, MultipartFile file) throws IOException {
+	public String uploadFile(Model model, MultipartFile file,Principal p) throws IOException {
+		Role role=new Role();
+		if(p!=null) {
+		role=userRegistrationService.getRoleByEmail(p.getName());
+		}else {
+			role.setName("");
+		}
+		model.addAttribute("role", role);
 		System.out.println("reading file................");
 		if (file != null && file.getOriginalFilename() != null
 				&& (file.getOriginalFilename().endsWith("xls") || file.getOriginalFilename().endsWith("xlsx"))) {
@@ -100,7 +120,14 @@ public class ExcelController {
 
 	@ResponseBody
 	@RequestMapping(value = "/addListOfProfiles", method = RequestMethod.POST)
-	public AjaxResponseBody saveListOfProfiles(Model model, @RequestBody String candidatesToSaveStr) {
+	public AjaxResponseBody saveListOfProfiles(Model model, @RequestBody String candidatesToSaveStr,Principal p) {
+		Role role=new Role();
+		if(p!=null) {
+		role=userRegistrationService.getRoleByEmail(p.getName());
+		}else {
+			role.setName("");
+		}
+		model.addAttribute("role", role);
 		System.out.println("***********the data ocmding is:"+candidatesToSaveStr);
 		AjaxResponseBody arb=new AjaxResponseBody();
 		ObjectMapper mapper=new ObjectMapper();
@@ -228,20 +255,5 @@ public class ExcelController {
 		return candidates;
 	}
 
-	// @RequestMapping(value = "/readPOI")
-	// public String readPOI(Model model) throws IOException {
-	// if (fileLocation != null) {
-	// if (fileLocation.endsWith(".xlsx") || fileLocation.endsWith(".xls")) {
-	// Map<Integer, List<MyCell>> data = excelPOIHelper.readExcel(fileLocation);
-	// List<CandidateDto> candidatesFetched = new ArrayList<CandidateDto>();
-	// candidatesFetched = fetchData(data);
-	// model.addAttribute("candidates", candidatesFetched);
-	// } else {
-	// model.addAttribute("message", "Not a valid excel file!");
-	// }
-	// } else {
-	// model.addAttribute("message", "File missing! Please upload an excel file.");
-	// }
-	// return "excel";
-	// }
+
 }
