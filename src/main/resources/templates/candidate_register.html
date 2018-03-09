@@ -71,9 +71,9 @@
 					<div class="form-group">
 						<label for="BRM" th:text="'BRM'" class="col-sm-3 control-label"></label>
 						<div class="col-sm-7">
-							<select id="BRM" name="BRM"
-									th:field="*{brm}" class="form-control">
-									<option th:value="null" th:text="'Sellect BRM'"></option>
+							<select id="BRM" name="BRM" th:field="*{brm}"
+								class="form-control">
+								<option th:value="null" th:text="'Sellect BRM'"></option>
 								<option th:each="brmuser : ${brmusers}"
 									th:value="${brmuser.username}"
 									th:text="${brmuser.lastName+ ' ' + brmuser.firstName}" />
@@ -83,21 +83,13 @@
 					<div class="form-group">
 						<label for="SPOC" th:text="'SPOC'" class="col-sm-3 control-label"></label>
 						<div class="col-sm-7">
-							<select id="SPOC" name="SPOC"
-									th:field="*{spoc}" class="form-control">
+							<select id="SPOC" name="SPOC" th:field="*{spoc}"
+								class="form-control">
 								<option th:value="null" th:text="'Sellect SPOC'"></option>
 								<option th:each="spocuser : ${spocusers}"
 									th:value="${spocuser.username}"
 									th:utext="${spocuser.lastName+ ' ' + spocuser.firstName}" />
 							</select>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label for="date" th:text="'Date'" class="col-sm-3 control-label"></label>
-						<div class="col-sm-7">
-							<input id="date" name="date" th:field="*{date}" type="text"
-								class="form-control" />
 						</div>
 					</div>
 					<div class="form-group">
@@ -121,34 +113,53 @@
 						<label for="status" th:text="'Status'"
 							class="col-sm-3 control-label"></label>
 						<div class="col-sm-7">
-							<select id="statusType" class="form-control selectpicker" name="statusType"
-								th:field="*{status}">
+
+							<select id="statusType" class="form-control selectpicker"
+								name="statusType" th:field="*{status}">
 								<option th:text="'-Select status-'" th:value="'New initiated'"></option>
 								<option th:text="Accepted" th:value="Accepted"></option>
 								<option th:text="Contacted" th:value="Contacted"></option>
 								<option th:text="Interviewed" th:value="Interviewed"></option>
 								<option th:text="Rejected" th:value="Rejected"></option>
 								<option th:text="Sellected" th:value="Sellected"></option>
-							</select>
-							<input id="anySpecialSkill" name="anySpecialSkill"
-								th:field="*{oldStatus}" type="hidden"  />
+							</select> <input id="anySpecialSkill" name="anySpecialSkill"
+								th:field="*{oldStatus}" type="hidden" />
 
 						</div>
 					</div>
-					<!-- <div th:if="${!(role.name=='SPOC' || role.name=='BRM')}"
-						class="form-group">
-						<label for="status" th:text="'status'"
-							class="col-sm-3 control-label"></label>
-						<div class="col-sm-7">
-							<p th:text="${candidate.status}"></p>
+					<div class="form-group">
+						<div class="col-sm-12" th:if="${history!=null}">
+							<label for="status" th:text="'Status changes'"
+								class="col-sm-3 control-label"></label>
+							<div class="col-sm-7">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>Changed by</th>
+											<th>Date</th>
+											<th>From</th>
+											<th>To</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="change:${history}">
+											<td th:text="${change.changedBy}">Mark</td>
+											<td th:text="${change.date}">Otto</td>
+											<td th:text="${change.changedFrom}">@mdo</td>
+											<td th:text="${change.changedTo}">@mdo</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
-					</div> -->
+					</div>
 
 					<div class="form-group">
 						<label for="feedBack" th:text="'FeedBack'"
 							class="col-sm-3 control-label"></label>
 						<div class="col-sm-7">
-							<textarea rows="10" cols="80" th:field="*{feedBack}">... </textarea>
+							<textarea rows="10" th:field="*{feedBack}" class="col-sm-12">
+							</textarea>
 
 						</div>
 					</div>

@@ -84,6 +84,8 @@ public class AccountProfile {
 	}
 	@RequestMapping(value="/profile/{candidateId}",method = RequestMethod.GET)
 	public String viewCandidateProfile(Model model,Principal p,@PathVariable("candidateId") Long candidateId){
+
+		SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
 		Role role=new Role();
 		if(p!=null) {
 		role=userRegistrationService.getRoleByEmail(p.getName());
@@ -103,6 +105,11 @@ public class AccountProfile {
 		CandidateProfile  candidateProfile=candiateProfileService.getCandidateProfile(candidateId);
 		candidateProfile.setOldStatus(candidateProfile.getStatus());
 		model.addAttribute("candidate", candidateProfile);
+		
+		System.out.println("***************************history fetching");
+		List<StatusChange> history=candiateProfileService.getStatusChanges(candidateProfile);
+		System.out.println("***************************"+history.size()+" history found"+history.isEmpty());
+		model.addAttribute("history", history.isEmpty()?null:history);
 		return CANDIDATE_REGISTER;
 	}
 
@@ -131,7 +138,8 @@ public class AccountProfile {
 	
 	@RequestMapping(value="/profile/add",method = RequestMethod.POST)
 	public String addCandidateProfilePost(Model model,Principal p,CandidateProfile candidateProfile){
-		
+
+		SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
 		System.out.println("The status is changed in save: to "+candidateProfile.getStatus()+" from "+ candidateProfile.getOldStatus());
 		Role role=new Role();
 		
@@ -142,25 +150,16 @@ public class AccountProfile {
 		}
 		System.out.println("role is:"+role.getName());
 		model.addAttribute("role", role);
-		
-		//history
-		
-		
-		
+		candidateProfile.setDate(sdf.format(new Date()));
 		CandidateProfile savedProfile=candiateProfileService.saveCandidate(candidateProfile);
 		if(!candidateProfile.getOldStatus().equalsIgnoreCase(candidateProfile.getStatus())) {
 			StatusChange statusChange=new StatusChange();
 			statusChange.setChangedBy(p.getName());
-			SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
 			statusChange.setDate(sdf.format(new Date()));
 			statusChange.setChangedFrom(candidateProfile.getOldStatus());
 			statusChange.setChangedTo(candidateProfile.getStatus());
 			statusChange.setCandidateProfile(savedProfile);
 			candiateProfileService.saveChangeHistory(statusChange);
-			System.out.println("***************************history saved");
-			List<StatusChange> history=candiateProfileService.getStatusChanges(savedProfile);
-			System.out.println("***************************"+history.size()+" history found");
-			model.addAttribute("history", null);
 			
 //			candidateProfile.getStatusChanges().add(statusChange);
 		}
