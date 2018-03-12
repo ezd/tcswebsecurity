@@ -41,9 +41,7 @@
 									<button th:if="${role.name=='USER'}" class="btn btn-default" type=""
 										style="height: 32px; margin: 0px;" placement="top"
 										title="Add new"
-										id="add_button"
-										
-										>
+										id="add_button">
 										<span class="glyphicon glyphicon-plus"></span>
 									</button>
 									<button th:if="${role.name=='USER'}" type="button" class="btn btn-default"
@@ -71,15 +69,25 @@
 		    </tr>
 		  </thead>
 		  <tbody>
-		    <tr th:each="candidate:${candidatesList}">
+		    <tr th:each="candidate:${candidatesList}" th:if="${!candidate.viewed}" style="font-weight: bold;">
 		      <td th:text="${candidate.vendor}">Mark</td>
 		      <td th:text="${candidate.candidateName}">Otto</td>
-		      <td th:text="${candidate.brm}">@mdo</td>
-		      <td th:text="${candidate.spoc}">@mdo</td>
+		      <td th:text="${candidate.brmFullName}">@mdo</td>
+		      <td th:text="${candidate.spocFullName}">@mdo</td>
 		      <td th:text="${candidate.status}">@mdo</td>
 		      <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">View</a></td>
 		      <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">Feedback</a></td>
-		      </tr>
+		    </tr>
+		    
+		    <tr th:each="candidate:${candidatesList}" th:if="${candidate.viewed}" >
+		      <td th:text="${candidate.vendor}">Mark</td>
+		      <td th:text="${candidate.candidateName}">Otto</td>
+		      <td th:text="${candidate.brmFullName}">@mdo</td>
+		      <td th:text="${candidate.spocFullName}">@mdo</td>
+		      <td th:text="${candidate.status}">@mdo</td>
+		      <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">View</a></td>
+		      <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">Feedback</a></td>
+		    </tr>
 		<!-- <td th:if="${role.name=='SPOC' || role.name=='PMP'}"><a th:href="${ '/profile/feedback' + candidate.id }">Feedback</a></td>
 		  -->     
 		  </tbody>

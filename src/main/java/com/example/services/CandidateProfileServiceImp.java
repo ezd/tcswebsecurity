@@ -1,5 +1,6 @@
 package com.example.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.entities.CandidateProfile;
 import com.example.entities.StatusChange;
+import com.example.entities.User;
 import com.example.entities.excel.CandidateDto;
 import com.example.entities.excel.ProfilesToSave;
 import com.example.repository.CandidateProfileRepository;
@@ -19,13 +21,42 @@ public class CandidateProfileServiceImp implements CandiateProfileService {
 
 	@Autowired
 	CandidateProfileRepository candidateProfileRepository;
+	@Autowired
+	UserRegistrationService userRegistrationService;
 	
 	@Autowired
 	ChangestatusRepo changeStatrusRepo;
 	
 	@Override
 	public List<CandidateProfile> getAllProfiles() {
-		return (List<CandidateProfile>)candidateProfileRepository.findAll();
+		String spocName="";
+		String brmName="";
+		User userByEmailBrm = null;
+		User userByEmailSpoc = null;
+		List<CandidateProfile> profiles= (List<CandidateProfile>)candidateProfileRepository.findAll();
+		List<CandidateProfile> profilesFillted=new ArrayList<CandidateProfile>();
+		CandidateProfile cp=null;
+		for(int i=0;i<profiles.size();i++) {
+			spocName="Not Found";
+			brmName="Not Found";
+			cp=null;
+			cp=profiles.get(i);
+			cp.setViewed(true);
+			
+			userByEmailBrm = userRegistrationService.getUserByEmail(cp.getBrm());
+			if(userByEmailBrm!=null) {
+				brmName=userByEmailBrm.getLastName()+" "+userByEmailBrm.getFirstName();
+			}
+			userByEmailSpoc = userRegistrationService.getUserByEmail(cp.getSpoc());
+			if(userByEmailSpoc!=null) {
+				spocName=userByEmailSpoc.getLastName()+" "+userByEmailSpoc.getFirstName();
+			}
+			cp.setBrmFullName(brmName);
+			cp.setSpocFullName(spocName);
+			profilesFillted.add(cp);
+			System.out.println("**************************"+cp.toString());
+		}
+		return profilesFillted;
 	}
 
 	@Override
@@ -58,6 +89,7 @@ public class CandidateProfileServiceImp implements CandiateProfileService {
 			candidate.setTeam(cdt.getTeam());
 			candidate.setBrm(cdt.getBRM());
 			candidate.setSpoc(cdt.getSPOC());
+			candidate.setStatus("New initiated");
 			candidateProfileRepository.save(candidate);
 			System.out.println(candidate.getVendor()+" saved");
 		}
@@ -66,13 +98,70 @@ public class CandidateProfileServiceImp implements CandiateProfileService {
 
 	@Override
 	public List<CandidateProfile> getProfilesByBRM(String name) {
-		
-		return candidateProfileRepository.findByBrm(name);
+		String spocName="";
+		String brmName="";
+		User userByEmailBrm = null;
+		User userByEmailSpoc = null;
+		List<CandidateProfile> profiles= candidateProfileRepository.findByBrm(name);
+		List<CandidateProfile> profilesFillted=new ArrayList<CandidateProfile>();
+		CandidateProfile cp=null;
+		for(int i=0;i<profiles.size();i++) {
+			spocName="Not Found";
+			brmName="Not Found";
+			cp=profiles.get(i);
+			if(cp.isViewedByBrm()) {
+				cp.setViewed(true);
+			}else {
+				cp.setViewed(false);
+			}
+			userByEmailBrm = userRegistrationService.getUserByEmail(cp.getBrm());
+			if(userByEmailBrm!=null) {
+				brmName=userByEmailBrm.getLastName()+" "+userByEmailBrm.getFirstName();
+			}
+			userByEmailSpoc = userRegistrationService.getUserByEmail(cp.getSpoc());
+			if(userByEmailSpoc!=null) {
+				spocName=userByEmailSpoc.getLastName()+" "+userByEmailSpoc.getFirstName();
+			}
+			cp.setBrmFullName(brmName);
+			cp.setSpocFullName(spocName);
+			profilesFillted.add(cp);
+		}
+		return profilesFillted;
 	}
 
 	@Override
 	public List<CandidateProfile> getProfilesBySPOC(String name) {
-		return candidateProfileRepository.findBySpoc(name);
+		String spocName="";
+		String brmName="";
+		User userByEmailBrm = null;
+		User userByEmailSpoc = null;
+		List<CandidateProfile> profiles=candidateProfileRepository.findBySpoc(name);
+		List<CandidateProfile> profilesFillted=new ArrayList<CandidateProfile>();
+		CandidateProfile cp=null;
+		for(int i=0;i<profiles.size();i++) {
+			spocName="Not Found";
+			brmName="Not Found";
+			cp=profiles.get(i);
+			if(cp.isViewedBySpoc()) {
+				cp.setViewed(true);
+			}else {
+				cp.setViewed(false);
+			}
+			
+			userByEmailBrm = userRegistrationService.getUserByEmail(cp.getBrm());
+			if(userByEmailBrm!=null) {
+				brmName=userByEmailBrm.getLastName()+" "+userByEmailBrm.getFirstName();
+			}
+			userByEmailSpoc = userRegistrationService.getUserByEmail(cp.getSpoc());
+			if(userByEmailSpoc!=null) {
+				spocName=userByEmailSpoc.getLastName()+" "+userByEmailSpoc.getFirstName();
+			}
+			cp.setBrmFullName(brmName);
+			cp.setSpocFullName(spocName);
+			profilesFillted.add(cp);
+		}
+		return profilesFillted;
+		
 	}
 
 	@Override

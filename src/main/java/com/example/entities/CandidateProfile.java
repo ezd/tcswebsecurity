@@ -24,10 +24,58 @@ public class CandidateProfile {
 	String skills;
 	String brm;
 	String spoc;
-
+	boolean viewedByBrm;
+	boolean viewedBySpoc;
+	@Transient
+	boolean viewed;
+	@Transient
+	String brmFullName;
+	@Transient
+	String spocFullName;
 	String team;
 	String date;
 	String status;
+
+	
+	public String getBrmFullName() {
+		return brmFullName;
+	}
+
+	public void setBrmFullName(String brmFullName) {
+		this.brmFullName = brmFullName;
+	}
+
+	public String getSpocFullName() {
+		return spocFullName;
+	}
+
+	public void setSpocFullName(String spocFullName) {
+		this.spocFullName = spocFullName;
+	}
+
+	public boolean isViewedByBrm() {
+		return viewedByBrm;
+	}
+
+	public void setViewedByBrm(boolean viewedByBrm) {
+		this.viewedByBrm = viewedByBrm;
+	}
+
+	public boolean isViewedBySpoc() {
+		return viewedBySpoc;
+	}
+
+	public void setViewedBySpoc(boolean viewedBySpoc) {
+		this.viewedBySpoc = viewedBySpoc;
+	}
+
+	public boolean isViewed() {
+		return viewed;
+	}
+
+	public void setViewed(boolean viewed) {
+		this.viewed = viewed;
+	}
 
 	public String getOldStatus() {
 		return oldStatus;
@@ -149,6 +197,16 @@ public class CandidateProfile {
 
 	public void setFeedBack(String feedBack) {
 		this.feedBack = feedBack;
+	}
+
+	@Override
+	public String toString() {
+		return "CandidateProfile [id=" + id + ", vendor=" + vendor + ", candidateName=" + candidateName + ", skills="
+				+ skills + ", brm=" + brm + ", spoc=" + spoc + ", viewedByBrm=" + viewedByBrm + ", viewedBySpoc="
+				+ viewedBySpoc + ", viewed=" + viewed + ", brmFullName=" + brmFullName + ", spocFullName="
+				+ spocFullName + ", team=" + team + ", date=" + date + ", status=" + status + ", oldStatus=" + oldStatus
+				+ ", location=" + location + ", anySpecialSkill=" + anySpecialSkill + ", feedBack=" + feedBack
+				+ ", statusChanges=" + statusChanges + "]";
 	}
 
 	

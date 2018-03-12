@@ -80,6 +80,7 @@ public class AccountProfile {
 		model.addAttribute("role", role);
 		CandidateProfile  candidateProfile=candiateProfileService.getCandidateProfile(candidateId);
 		model.addAttribute("candidate", candidateProfile);
+		
 		return CANDIDATE_REGISTER;
 	}
 	@RequestMapping(value="/profile/{candidateId}",method = RequestMethod.GET)
@@ -110,6 +111,15 @@ public class AccountProfile {
 		List<StatusChange> history=candiateProfileService.getStatusChanges(candidateProfile);
 		System.out.println("***************************"+history.size()+" history found"+history.isEmpty());
 		model.addAttribute("history", history.isEmpty()?null:history);
+		
+		if(role.getName().equalsIgnoreCase("BRM")) {
+			candidateProfile.setViewedByBrm(true);
+			candiateProfileService.saveCandidate(candidateProfile);
+		}else if(role.getName().equalsIgnoreCase("SPOC")) {
+			candidateProfile.setViewedBySpoc(true);
+			candiateProfileService.saveCandidate(candidateProfile);
+		}
+		
 		return CANDIDATE_REGISTER;
 	}
 
