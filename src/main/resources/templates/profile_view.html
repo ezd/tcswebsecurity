@@ -75,7 +75,7 @@
 		      <td th:text="${candidate.brmFullName}">@mdo</td>
 		      <td th:text="${candidate.spocFullName}">@mdo</td>
 		      <td th:text="${candidate.status}">@mdo</td>
-		      <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">View</a></td>
+		      <!-- <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">View</a></td> -->
 		      <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">Feedback</a></td>
 		    </tr>
 		    
@@ -85,7 +85,7 @@
 		      <td th:text="${candidate.brmFullName}">@mdo</td>
 		      <td th:text="${candidate.spocFullName}">@mdo</td>
 		      <td th:text="${candidate.status}">@mdo</td>
-		      <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">View</a></td>
+		      <!-- <td th:if="${#authorization?.expression('isAuthenticated()')}" style=""><a th:href="${ '/profile/' + candidate.id }">View</a></td> -->
 		      <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">Feedback</a></td>
 		    </tr>
 		<!-- <td th:if="${role.name=='SPOC' || role.name=='PMP'}"><a th:href="${ '/profile/feedback' + candidate.id }">Feedback</a></td>
