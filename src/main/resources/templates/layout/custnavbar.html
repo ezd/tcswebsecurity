@@ -12,7 +12,7 @@
 							class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#">Project name</a>
+					<a class="navbar-brand" href="#">TCS</a>
 				</div>
 				<div id="navbar" class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
@@ -21,7 +21,7 @@
 						<li th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="@{/profile/view}">Profiles List</a></li>
 						<li th:if="${role!='USER'?role.name=='USER':false}"><a th:href="@{/profile/add}">Register Profile</a></li>
 						<li th:if="${role!='USER'?role.name=='USER':false}"><a th:href="@{/uploadExcelFile}">Upload Profiles</a></li>
-						
+						<li th:if="${role!='BRM'?role.name=='BRM':false}"><a th:href="@{/report}">Report</a></li>
 						<li sec:authorize="hasRole('SPOC')"><a th:href="@{/SPOC/info}">SPOC Info</a></li>
 						<li sec:authorize="hasRole('PMP')"><a th:href="@{/PMP/info}">PMP Info</a></li>
 					</ul>

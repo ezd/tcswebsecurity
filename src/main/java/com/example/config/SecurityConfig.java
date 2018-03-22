@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 }
 	
 	private static final String[] RESOURCES = {
-			"/css/**","/js/**","/","/webjars/**","/login","/saveUser","/forgetPassword"
+			"/css/**","/js/**","/image/**","/","/webjars/**","/login","/saveUser","/forgetPassword"
 			,"/updatePassword","/register"
 	};
 	

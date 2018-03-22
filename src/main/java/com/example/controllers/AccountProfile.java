@@ -86,7 +86,6 @@ public class AccountProfile {
 	@RequestMapping(value="/profile/{candidateId}",method = RequestMethod.GET)
 	public String viewCandidateProfile(Model model,Principal p,@PathVariable("candidateId") Long candidateId){
 
-		SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
 		Role role=new Role();
 		if(p!=null) {
 		role=userRegistrationService.getRoleByEmail(p.getName());
@@ -149,7 +148,7 @@ public class AccountProfile {
 	@RequestMapping(value="/profile/add",method = RequestMethod.POST)
 	public String addCandidateProfilePost(Model model,Principal p,CandidateProfile candidateProfile){
 
-		SimpleDateFormat sdf=new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat sdf=new SimpleDateFormat("YYYY-MM-dd");
 		System.out.println("The status is changed in save: to "+candidateProfile.getStatus()+" from "+ candidateProfile.getOldStatus());
 		Role role=new Role();
 		
@@ -161,6 +160,7 @@ public class AccountProfile {
 		System.out.println("role is:"+role.getName());
 		model.addAttribute("role", role);
 		candidateProfile.setDate(sdf.format(new Date()));
+		System.out.println("*****************The date is"+sdf.format(new Date()));
 		CandidateProfile savedProfile=candiateProfileService.saveCandidate(candidateProfile);
 		if(!candidateProfile.getOldStatus().equalsIgnoreCase(candidateProfile.getStatus())) {
 			StatusChange statusChange=new StatusChange();

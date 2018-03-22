@@ -67,7 +67,7 @@ public class WebSecurityApplication {
 		this.msgTemplate = msgTemplate;
 	}
 	
-	@PostConstruct
+	/*@PostConstruct
 	public void dbinit(){
 		Role adminRole=new Role(RoleEnum.ADMIN);
 		
@@ -96,5 +96,5 @@ public class WebSecurityApplication {
 //		this.msgTemplate.setText("It should works");
 //		SimpleMailMessage msg=new SimpleMailMessage(msgTemplate);
 //		mailSender.send(msg);
-	}
+	}*/
 }

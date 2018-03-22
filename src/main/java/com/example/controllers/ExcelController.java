@@ -5,7 +5,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -163,7 +166,7 @@ public class ExcelController {
 		String degitRegex = "[0-9]*\\.?[0-9]*";
 		String emailRegex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 		String dateRegex = "(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)";
-
+		String formateddate="";
 		Iterator<Map.Entry<Integer, List<MyCell>>> it = data.entrySet().iterator();
 		it.next();
 		while (it.hasNext()) {
@@ -217,9 +220,25 @@ public class ExcelController {
 
 				}
 				if (row.getValue().size() >= 6) {
-					isDate = row.getValue().get(5).getContent().matches(dateRegex);
+					System.out.println("+++++++++++The date found is:"+row.getValue().get(5).getContent());
+					//Sun Mar 04 00:00:00 CST 2018
+					
+					
+//					isDate = row.getValue().get(5).getContent().matches(dateRegex);
+					isDate=true;
 					if (isDate) {
-						candidate.setDate(row.getValue().get(5).getContent());
+						String dateContent=row.getValue().get(5).getContent();
+						SimpleDateFormat formater= new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+						SimpleDateFormat formate2= new SimpleDateFormat("yyyy-MM-dd");
+						try {
+							Date date=formater.parse(dateContent);
+							formateddate=formate2.format(date);
+							System.out.println("formated as:"+formateddate);
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						candidate.setDate(formateddate);
 						// get user by email >> User user=
 					} else {
 						rejectedData.add("Vendor:" + candidate.getVendor() + " candidate:"
