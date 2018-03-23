@@ -35,7 +35,7 @@ public class ReportController {
 	UserRegistrationService userRegistrationService;
 
 	
-
+/*
 	@RequestMapping(value="/report",method = RequestMethod.GET)
 	public String viewReport(Model model,Principal p){
 		Role role=new Role();
@@ -68,7 +68,7 @@ public class ReportController {
 		
 		return REPORT;
 	}
-	
+	*/
 	
 	
 	

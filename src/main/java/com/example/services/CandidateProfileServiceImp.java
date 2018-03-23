@@ -8,12 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.entities.CandidateProfile;
+import com.example.entities.CandidateProfileReprot;
 import com.example.entities.StatusChange;
 import com.example.entities.User;
 import com.example.entities.excel.CandidateDto;
 import com.example.entities.excel.ProfilesToSave;
 import com.example.repository.CandidateProfileRepository;
 import com.example.repository.ChangestatusRepo;
+import com.example.repository.ReportDaoImpl;
 
 
 @Service
@@ -27,6 +29,47 @@ public class CandidateProfileServiceImp implements CandiateProfileService {
 	@Autowired
 	ChangestatusRepo changeStatrusRepo;
 	
+	@Override
+	public List<CandidateProfile> getReport(String brm) {
+		String spocName="";
+		spocName="someone";
+		String brmName="";
+		User userByEmailBrm = null;
+		User userByEmailSpoc = null;
+		CandidateProfileReprot cpr=new CandidateProfileReprot();
+		List<CandidateProfile> profiles= (List<CandidateProfile>)candidateProfileRepository.findByBrm(brm);
+		for(CandidateProfile cp:profiles) {
+			cpr.setAny_special_skill(cp.getAnySpecialSkill());
+			User x=userRegistrationService.getUserByEmail(cp.getBrm());
+			if(x!=null) {
+				cpr.setBrm(x.getFirstName()+" "+x.getLastName());
+			}else {
+				cpr.setBrm("Not Found");
+			}
+			User y=userRegistrationService.getUserByEmail(cp.getBrm());
+			if(y!=null) {
+				cpr.setSpoc(y.getFirstName()+" "+y.getLastName());
+			}else {
+				cpr.setSpoc("Not Found");
+			}
+			cpr.setCandidate_name(cp.getCandidateName());
+			cpr.setLocation(cp.getLocation());
+			cpr.setRegisterd(cp.getDate());
+			cpr.setSkills(cp.getSkills());
+			cpr.setTeam(cp.getTeam());
+			cpr.setVendor(cp.getVendor());
+			if(!cp.getStatusChanges().isEmpty()) {
+				System.out.println(cp.getCandidateName()+"-------------this user hase history");
+			}
+			
+			
+		}
+		List<CandidateProfile> profilesFillted=new ArrayList<CandidateProfile>();
+//		CandidateProfile cp=null;
+//		ReportDaoImpl rdi=new ReportDaoImpl();
+//		rdi.getall();
+		return profilesFillted;
+	}
 	@Override
 	public List<CandidateProfile> getAllProfiles() {
 		String spocName="";
@@ -175,5 +218,7 @@ public class CandidateProfileServiceImp implements CandiateProfileService {
 		// TODO Auto-generated method stub
 		return changeStatrusRepo.findByCandidateProfile(profile);
 	}
+
+	
 
 }

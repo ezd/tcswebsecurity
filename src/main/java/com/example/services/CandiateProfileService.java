@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 
 import com.example.entities.CandidateProfile;
+import com.example.entities.CandidateProfileReprot;
 import com.example.entities.Role;
 import com.example.entities.StatusChange;
 import com.example.entities.User;
@@ -23,5 +24,6 @@ public interface CandiateProfileService {
 	List<CandidateProfile> getProfilesBySPOC(String name);
 	StatusChange saveChangeHistory(StatusChange statusChange);
 	List<StatusChange> getStatusChanges(CandidateProfile profile);
+	List<CandidateProfile> getReport(String brm);
 	
 }

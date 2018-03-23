@@ -10,11 +10,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.entities.CandidateProfile;
+import com.example.entities.CandidateProfileReprot;
 import com.example.entities.User;
 @Repository
 public interface CandidateProfileRepository extends CrudRepository<CandidateProfile, Long> {
 
 	List<CandidateProfile> findByBrm(String brm);
 	List<CandidateProfile> findBySpoc(String spoc);
-	
+		
 }

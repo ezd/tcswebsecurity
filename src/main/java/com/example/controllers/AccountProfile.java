@@ -30,6 +30,8 @@ public class AccountProfile {
 	private static final String ADMIN_PROFILE = "adminPrivate";
 	private static final String PROFILE_VIEW = "profile_view";
 	private static final String CANDIDATE_REGISTER = "candidate_register";
+	
+	private static final String REPORT_VIEW = "report";
 //	candidate_register
 	@Autowired
 	CandiateProfileService candiateProfileService;
@@ -63,10 +65,17 @@ public class AccountProfile {
 			System.out.println("any user with"+candidatesList.size()+" candidates");
 		}
 		model.addAttribute("candidatesList", candidatesList);
-		
 		return PROFILE_VIEW;
 	}
 	
+	
+	@RequestMapping(value="/report",method = RequestMethod.GET)
+	public String showReport(Model model,Principal p){
+		
+		candiateProfileService.getReport("brm@gmail.com");
+		
+		return REPORT_VIEW;
+	}
 	@RequestMapping(value="/profile/feedback/{candidateId}",method = RequestMethod.GET)
 	public String updateViewCandidateProfile(Model model,@PathVariable("candidateId") Long candidateId,Principal p){
 		
