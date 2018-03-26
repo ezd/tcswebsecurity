@@ -6,10 +6,7 @@
 		<div th:include="layout/custnavbar :: custnavbar"></div>
 
 
-		<!-- Main component for a primary marketing message or call to action -->
 		<div class="jumbotron" style="min-height: 500px">
-		<!-- <div th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="@{/profile/add}">Add</a></div>
-	 -->
 	<!-- Button trigger modal -->
 
 <!-- Modal -->
@@ -33,29 +30,7 @@
   </div>
 </div>
 	
-	<div class="row">
-	
-		<!-- <div class="input-group">
-								<span class="input-group-btn">
-									
-									<button th:if="${role.name=='USER'}" class="btn btn-default" type=""
-										style="height: 32px; margin: 0px;" placement="top"
-										title="Add new"
-										id="add_button">
-										<span class="glyphicon glyphicon-plus"></span>
-									</button>
-									<button th:if="${role.name=='USER'}" type="button" class="btn btn-default"
-										style="height: 32px; margin: 0px;" data-toggle="modal"
-										data-target="#myModal"
-										title="Email alert">
-										<span class="glyphicon glyphicon-envelope"></span>
-									</button>
-								</span>
-	
-	
-		</div> -->
-	</div>
-	<div class="row" style="overflow: scroll;">
+	<div class="row" >
 		<table class="table">
 		  <thead>
 		    <tr>
@@ -63,33 +38,29 @@
 		      <th>Candidate Name</th>
 		      <th>BRM</th>
 		      <th>SPOC</th>
-		      <th>Status</th>
-		      <th></th>
-		      <th></th>
+		      <th>Team</th>
+		      <th>Registered</th>
+		      <th>Special skills</th>
+		      <th>location</th>
+		      <th>Last Changed</th>
+		      <th>Last Status</th>
 		    </tr>
 		  </thead>
 		  <tbody>
-		    <!-- <tr th:each="candidate:${candidatesList}" th:if="${!candidate.viewed}" style="font-weight: bold;">
+		    <tr th:each="candidate:${reportList}" >
 		      <td th:text="${candidate.vendor}">Mark</td>
-		      <td th:text="${candidate.candidateName}">Otto</td>
-		      <td th:text="${candidate.brmFullName}">@mdo</td>
-		      <td th:text="${candidate.spocFullName}">@mdo</td>
-		      <td th:text="${candidate.status}">@mdo</td>
-		      <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">View</a></td>
-		      <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">Feedback</a></td>
+		      <td th:text="${candidate.candidate_name}">Otto</td>
+		      <td th:text="${candidate.brm}">@mdo</td>
+		      <td th:text="${candidate.spoc}">@mdo</td>
+		      <td th:text="${candidate.team}">@mdo</td>
+		      <td th:text="${candidate.registerd}">@mdo</td>
+		      <td th:text="${candidate.any_special_skill}">@mdo</td>
+		      <td th:text="${candidate.location}">@mdo</td>
+		      <td th:text="${candidate.changed_to}">@mdo</td>
+		      <td th:text="${candidate.last_change_date}">@mdo</td>
 		    </tr>
 		    
-		    <tr th:each="candidate:${candidatesList}" th:if="${candidate.viewed}" >
-		      <td th:text="${candidate.vendor}">Mark</td>
-		      <td th:text="${candidate.candidateName}">Otto</td>
-		      <td th:text="${candidate.brmFullName}">@mdo</td>
-		      <td th:text="${candidate.spocFullName}">@mdo</td>
-		      <td th:text="${candidate.status}">@mdo</td>
-		      <td th:if="${#authorization?.expression('isAuthenticated()')}" style=""><a th:href="${ '/profile/' + candidate.id }">View</a></td>
-		      <td th:if="${#authorization?.expression('isAuthenticated()')}"><a th:href="${ '/profile/' + candidate.id }">Feedback</a></td>
-		    </tr> -->
-		<!-- <td th:if="${role.name=='SPOC' || role.name=='PMP'}"><a th:href="${ '/profile/feedback' + candidate.id }">Feedback</a></td>
-		  -->     
+     
 		  </tbody>
 		</table>
 		
@@ -103,14 +74,3 @@
 
 </body>
 </html>
-<script type="text/javascript">
-$(document).ready(
-		function(){
-			$('#add_button').click(function(){
-				window.location
-				.replace('/profile/add.html');
-			});
-		}
-		);
-
-</script>

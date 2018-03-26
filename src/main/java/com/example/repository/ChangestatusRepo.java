@@ -14,5 +14,7 @@ public interface ChangestatusRepo extends CrudRepository<StatusChange, Long> {
 
 	List<StatusChange> findByCandidateProfile(CandidateProfile profile);
 
+	List<StatusChange> findByCandidateProfileOrderByIdDesc(CandidateProfile cp);
+
 
 }

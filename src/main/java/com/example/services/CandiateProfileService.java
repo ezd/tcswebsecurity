@@ -24,6 +24,6 @@ public interface CandiateProfileService {
 	List<CandidateProfile> getProfilesBySPOC(String name);
 	StatusChange saveChangeHistory(StatusChange statusChange);
 	List<StatusChange> getStatusChanges(CandidateProfile profile);
-	List<CandidateProfile> getReport(String brm);
+	List<CandidateProfileReprot> getReport(String brm);
 	
 }

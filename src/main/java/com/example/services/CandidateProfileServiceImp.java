@@ -1,6 +1,7 @@
 package com.example.services;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,45 +31,47 @@ public class CandidateProfileServiceImp implements CandiateProfileService {
 	ChangestatusRepo changeStatrusRepo;
 	
 	@Override
-	public List<CandidateProfile> getReport(String brm) {
-		String spocName="";
-		spocName="someone";
-		String brmName="";
-		User userByEmailBrm = null;
-		User userByEmailSpoc = null;
-		CandidateProfileReprot cpr=new CandidateProfileReprot();
+	public List<CandidateProfileReprot> getReport(String brm) {
+		CandidateProfileReprot cpr=null;
+		List<CandidateProfileReprot> reportList=new ArrayList<CandidateProfileReprot>();
 		List<CandidateProfile> profiles= (List<CandidateProfile>)candidateProfileRepository.findByBrm(brm);
 		for(CandidateProfile cp:profiles) {
+			cpr=new CandidateProfileReprot();
+			System.out.println("checking "+cp.getCandidateName());
 			cpr.setAny_special_skill(cp.getAnySpecialSkill());
-			User x=userRegistrationService.getUserByEmail(cp.getBrm());
-			if(x!=null) {
-				cpr.setBrm(x.getFirstName()+" "+x.getLastName());
-			}else {
-				cpr.setBrm("Not Found");
-			}
-			User y=userRegistrationService.getUserByEmail(cp.getBrm());
-			if(y!=null) {
-				cpr.setSpoc(y.getFirstName()+" "+y.getLastName());
-			}else {
-				cpr.setSpoc("Not Found");
-			}
+			
+			User brmUser=userRegistrationService.getUserByEmail(cp.getBrm());
+			if(brmUser!=null) {cpr.setBrm(brmUser.getFirstName()+" "+brmUser.getLastName());
+			}else {cpr.setBrm("Not Found");}
+			
+			User spocUser=userRegistrationService.getUserByEmail(cp.getSpoc());
+			if(spocUser!=null) {cpr.setSpoc(spocUser.getFirstName()+" "+spocUser.getLastName());
+			}else {cpr.setSpoc("Not Found");}
+			
 			cpr.setCandidate_name(cp.getCandidateName());
 			cpr.setLocation(cp.getLocation());
 			cpr.setRegisterd(cp.getDate());
 			cpr.setSkills(cp.getSkills());
 			cpr.setTeam(cp.getTeam());
 			cpr.setVendor(cp.getVendor());
-			if(!cp.getStatusChanges().isEmpty()) {
-				System.out.println(cp.getCandidateName()+"-------------this user hase history");
+			List<StatusChange> statusChanges=changeStatrusRepo.findByCandidateProfileOrderByIdDesc(cp);
+			
+			if(!statusChanges.isEmpty()) {
+				StatusChange sch=statusChanges.get(0);
+				System.out.println(cp.getCandidateName()+"-------------this user hase history->"+sch.getChangedTo()+" id:"+sch.getId());
+				
+				cpr.setChanged_to(sch.getChangedTo());
+				cpr.setLast_change_date(sch.getDate());
+				cpr.setChangedBy(sch.getChangedBy());
 			}
-			
-			
+			/*else {
+				cpr.setChanged_to(null);
+				cpr.setLast_change_date(sch.getDate());
+				cpr.setChangedBy(sch.getChangedBy());
+			}*/
+			reportList.add(cpr);
 		}
-		List<CandidateProfile> profilesFillted=new ArrayList<CandidateProfile>();
-//		CandidateProfile cp=null;
-//		ReportDaoImpl rdi=new ReportDaoImpl();
-//		rdi.getall();
-		return profilesFillted;
+		return reportList;
 	}
 	@Override
 	public List<CandidateProfile> getAllProfiles() {

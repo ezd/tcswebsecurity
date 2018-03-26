@@ -9,9 +9,17 @@ public class CandidateProfileReprot {
 	String registerd;
 	String changed_to;
 	String last_change_date;
+	String changedBy;
 	String any_special_skill;
 	String location;
 	
+	
+	public String getChangedBy() {
+		return changedBy;
+	}
+	public void setChangedBy(String changedBy) {
+		this.changedBy = changedBy;
+	}
 	public String getLocation() {
 		return location;
 	}

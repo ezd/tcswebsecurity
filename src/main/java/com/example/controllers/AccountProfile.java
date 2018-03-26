@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entities.CandidateProfile;
+import com.example.entities.CandidateProfileReprot;
 import com.example.entities.Role;
 import com.example.entities.StatusChange;
 import com.example.entities.User;
@@ -69,13 +70,7 @@ public class AccountProfile {
 	}
 	
 	
-	@RequestMapping(value="/report",method = RequestMethod.GET)
-	public String showReport(Model model,Principal p){
-		
-		candiateProfileService.getReport("brm@gmail.com");
-		
-		return REPORT_VIEW;
-	}
+
 	@RequestMapping(value="/profile/feedback/{candidateId}",method = RequestMethod.GET)
 	public String updateViewCandidateProfile(Model model,@PathVariable("candidateId") Long candidateId,Principal p){
 		
