@@ -74,6 +74,50 @@ public class CandidateProfileServiceImp implements CandiateProfileService {
 		return reportList;
 	}
 	@Override
+	public List<CandidateProfileReprot> getReportByDate(String brm, String start, String end) {
+		CandidateProfileReprot cpr=null;
+		System.out.println(">>>>>>>>>>>>>checking with start:"+start+" and "+end);
+		List<CandidateProfileReprot> reportList=new ArrayList<CandidateProfileReprot>();
+		List<CandidateProfile> profiles= (List<CandidateProfile>)candidateProfileRepository.findByBrmDateRange(brm,start,end);
+		for(CandidateProfile cp:profiles) {
+			cpr=new CandidateProfileReprot();
+			System.out.println("checking "+cp.getCandidateName());
+			cpr.setAny_special_skill(cp.getAnySpecialSkill());
+			
+			User brmUser=userRegistrationService.getUserByEmail(cp.getBrm());
+			if(brmUser!=null) {cpr.setBrm(brmUser.getFirstName()+" "+brmUser.getLastName());
+			}else {cpr.setBrm("Not Found");}
+			
+			User spocUser=userRegistrationService.getUserByEmail(cp.getSpoc());
+			if(spocUser!=null) {cpr.setSpoc(spocUser.getFirstName()+" "+spocUser.getLastName());
+			}else {cpr.setSpoc("Not Found");}
+			
+			cpr.setCandidate_name(cp.getCandidateName());
+			cpr.setLocation(cp.getLocation());
+			cpr.setRegisterd(cp.getDate());
+			cpr.setSkills(cp.getSkills());
+			cpr.setTeam(cp.getTeam());
+			cpr.setVendor(cp.getVendor());
+			List<StatusChange> statusChanges=changeStatrusRepo.findByCandidateProfileOrderByIdDesc(cp);
+			
+			if(!statusChanges.isEmpty()) {
+				StatusChange sch=statusChanges.get(0);
+				System.out.println(cp.getCandidateName()+"-------------this user hase history->"+sch.getChangedTo()+" id:"+sch.getId());
+				
+				cpr.setChanged_to(sch.getChangedTo());
+				cpr.setLast_change_date(sch.getDate());
+				cpr.setChangedBy(sch.getChangedBy());
+			}
+			/*else {
+				cpr.setChanged_to(null);
+				cpr.setLast_change_date(sch.getDate());
+				cpr.setChangedBy(sch.getChangedBy());
+			}*/
+			reportList.add(cpr);
+		}
+		return reportList;
+	}
+	@Override
 	public List<CandidateProfile> getAllProfiles() {
 		String spocName="";
 		String brmName="";
@@ -221,6 +265,7 @@ public class CandidateProfileServiceImp implements CandiateProfileService {
 		// TODO Auto-generated method stub
 		return changeStatrusRepo.findByCandidateProfile(profile);
 	}
+	
 
 	
 

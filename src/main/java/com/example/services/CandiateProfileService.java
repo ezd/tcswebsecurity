@@ -25,5 +25,6 @@ public interface CandiateProfileService {
 	StatusChange saveChangeHistory(StatusChange statusChange);
 	List<StatusChange> getStatusChanges(CandidateProfile profile);
 	List<CandidateProfileReprot> getReport(String brm);
+	List<CandidateProfileReprot> getReportByDate(String string, String start, String end);
 	
 }

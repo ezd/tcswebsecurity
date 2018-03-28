@@ -17,5 +17,8 @@ public interface CandidateProfileRepository extends CrudRepository<CandidateProf
 
 	List<CandidateProfile> findByBrm(String brm);
 	List<CandidateProfile> findBySpoc(String spoc);
+	@Query(value="SELECT * FROM candidate_profile " + 
+			"where candidate_profile.brm=:brm && candidate_profile.date between date(:start) and date(:end);",nativeQuery=true)
+	List<CandidateProfile> findByBrmDateRange(@Param("brm")String brm, @Param("start")String start, @Param("end")String end);
 		
 }
