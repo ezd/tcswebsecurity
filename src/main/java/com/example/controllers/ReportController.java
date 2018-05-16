@@ -57,7 +57,12 @@ public class ReportController {
 	
 	@RequestMapping(value="/report",method = RequestMethod.GET)
 	public String showReport(Model model,Principal p){
-		this.wrtieExcelFile();
+		try {
+			this.wrtieExcelFile();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		Role role=new Role();
 		if(p!=null) {
@@ -118,14 +123,14 @@ public class ReportController {
 		
 	}
 	
-	public void wrtieExcelFile() {
+	public void wrtieExcelFile() throws FileNotFoundException {
 		String fileLocation;
 		File currDir = new File(".");
 		String path = currDir.getAbsolutePath();
-		fileLocation = path.substring(0, path.length() - 1) + file.getOriginalFilename();
+		fileLocation = path.substring(0, path.length() - 1) + "MyFirstExcel.xlsx";
 		FileOutputStream f = new FileOutputStream(fileLocation);
 
-	    final String FILE_NAME = "/tmp/MyFirstExcel.xlsx";
+	    //final String FILE_NAME = "/tmp/MyFirstExcel.xlsx";
 
 
 	        XSSFWorkbook workbook = new XSSFWorkbook();
@@ -155,7 +160,7 @@ public class ReportController {
 	        }
 
 	        try {
-	            FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
+	            FileOutputStream outputStream = new FileOutputStream(fileLocation);
 	            workbook.write(outputStream);
 	            workbook.close();
 	        } catch (FileNotFoundException e) {
