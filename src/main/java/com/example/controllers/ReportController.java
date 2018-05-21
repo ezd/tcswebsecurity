@@ -1,20 +1,21 @@
 package com.example.controllers;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.Principal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
-import javax.persistence.NamedStoredProcedureQueries;
-import javax.xml.ws.Response;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,23 +25,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.SerializationUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
-import com.example.entities.CandidateProfile;
 import com.example.entities.CandidateProfileReprot;
-import com.example.entities.Criteria;
 import com.example.entities.Role;
-import com.example.entities.StatusChange;
-import com.example.entities.User;
-import com.example.enums.RoleEnum;
 import com.example.services.CandiateProfileService;
-import com.example.services.CandidateProfileServiceImp;
 import com.example.services.UserRegistrationService;
 
 
@@ -80,27 +72,96 @@ public class ReportController {
 	}
 
 
-	@RequestMapping(value="/report_download",method = RequestMethod.GET,produces="application/vnd.ms-excel")
+	@SuppressWarnings("resource")
+	@RequestMapping(value="/report_download",method = RequestMethod.GET)
 	@ResponseStatus(value=HttpStatus.OK)
-	public HttpEntity<byte[]> downloadExcelReport() {
-	 
-	    /** assume that below line gives you file content in byte array **/
+	public HttpEntity<byte[]> downloadExcelReport(HttpServletResponse response) throws FileNotFoundException {
 		
-		List<String> names=new ArrayList<>();
-		names.add("ezedin");
-		names.add("sulu");
-		//1st option create a local excel file from list of object
-		//create byte[] from the file
-		//pass it
-		byte[] excelContent = SerializationUtils.serialize(names);
-//	    byte[] excelContent = {};
-	    // prepare response
-	    HttpHeaders header = new HttpHeaders();
-	    header.setContentType(new MediaType("application", "vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
-	    header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=my_file.xls");
-	    header.setContentLength(excelContent.length);
-	 
-	    return new HttpEntity<byte[]>(excelContent, header);
+		 //Create blank workbook
+	      XSSFWorkbook workbook = new XSSFWorkbook();
+	      
+	      //Create a blank sheet
+	      XSSFSheet spreadsheet = workbook.createSheet( " Employee Info ");
+
+	      //Create row object
+	      XSSFRow row;
+
+	      List<CandidateProfileReprot> reportList = candiateProfileService.getReport("brm@gmail.com");
+	      
+	      //This data needs to be written (Object[])
+	      Map < Integer, Object[] > empinfo = new TreeMap < Integer, Object[] >();
+	      
+	      empinfo.put( 1, new Object[] { "Vendor", "Candidate_Name", "BRM", "SPOC"});
+	      
+	      
+	      
+	      for (int i = 0; i < reportList.size(); i++) {
+	    	  CandidateProfileReprot candidateProfileReprot=reportList.get(i);
+	    	  empinfo.put( i+2, new Object[] {candidateProfileReprot.getVendor(), 
+		    		  candidateProfileReprot.getCandidate_name(), 
+		    		  candidateProfileReprot.getBrm(),
+		    		  candidateProfileReprot.getSpoc() });
+	  	}
+	      
+	      //model.addAttribute("Emplinfo",empinfo);
+	      //Iterate over data and write to sheet
+	      Set<Integer> keyid = empinfo.keySet();
+	      int rowid = 0;
+	      
+	      for (Integer key : keyid) {
+	         row = spreadsheet.createRow(rowid++);
+	         Object [] objectArr = empinfo.get(key);
+	         int cellid = 0;
+	         
+	         for (Object obj : objectArr){
+	            Cell cell = row.createCell(cellid++);
+	            cell.setCellValue((String)obj);
+	         }
+	      }
+	        File currDir = new File(".");
+			String path = currDir.getAbsolutePath();
+			String fileLocation = path.substring(0, path.length() - 1) + "Writesheet.xlsx";
+	      //Write the workbook in file system
+	      FileOutputStream out = new FileOutputStream(
+	         new File(fileLocation));
+	      
+	      try {
+			workbook.write(out);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	      try {
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	      
+	      FileInputStream fileInputStream = null;
+	      File file = new File(fileLocation);
+
+	      //init array with file length
+	      byte[] excelContent = new byte[(int) file.length()];
+	      
+	    //read file into bytes[]
+        fileInputStream = new FileInputStream(file);
+        try {
+			fileInputStream.read(excelContent);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	      HttpHeaders header = new HttpHeaders();
+	      header.setContentType(new MediaType("application", "vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+	      header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=my_file.xlsx");
+	      header.setContentLength(excelContent.length);
+
+	      System.out.println("Writesheet.xlsx written successfully");
+	   
+	      return new HttpEntity<byte[]>(excelContent, header);
+	    
 	}
 	
 	@RequestMapping(value="/reportByDate")
