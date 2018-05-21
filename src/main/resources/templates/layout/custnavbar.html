@@ -22,6 +22,7 @@
 						<li th:if="${role!='USER'?role.name=='USER':false}"><a th:href="@{/profile/add}">Register Profile</a></li>
 						<li th:if="${role!='USER'?role.name=='USER':false}"><a th:href="@{/uploadExcelFile}">Upload Profiles</a></li>
 						<li th:if="${role!='BRM'?role.name=='BRM':false}"><a th:href="@{/report}">Report</a></li>
+						<li th:if="${role!='BRM'?role.name=='BRM':false}"><a th:href="@{/report_download}">Report Download</a></li>
 						<li sec:authorize="hasRole('SPOC')"><a th:href="@{/SPOC/info}">SPOC Info</a></li>
 						<li sec:authorize="hasRole('PMP')"><a th:href="@{/PMP/info}">PMP Info</a></li>
 					</ul>
