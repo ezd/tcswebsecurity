@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thyemleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
-<head th:include="layout/custheader :: custheader"/>
+<html xmlns:th="http://www.thyemleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="layout/custheader :: custheader" />
 <body>
 	<div class="container">
 		<div th:include="layout/custnavbar :: custnavbar"></div>
@@ -8,65 +9,66 @@
 
 		<div class="jumbotron" style="min-height: 500px">
 
+			<!-- 			<div class="row"> -->
+			<!-- 				<div class="form-inline"> -->
+			<!-- 					<div class="form-group"> -->
+			<!-- 						<label for="staticEmail2" class="col-form-label">Search by Date:</label>  -->
+			<!-- 					</div> -->
+			<!-- 					<div class="form-group"> -->
+			<!-- 						<label for="from" class="col-form-label"> From</label>  -->
+			<!-- 						<input -->
+			<!-- 							type="date" class="form-control" id="from" -->
+			<!-- 							/> -->
+			<!-- 					</div> -->
+			<!-- 					<div class="form-group"> -->
+			<!-- 						<label for="to" class="col-form-label">to</label>  -->
+			<!-- 						<input -->
+			<!-- 							type="date" class="form-control" id="to" -->
+			<!-- 							/> -->
+			<!-- 					</div> -->
+
+			<!-- 					<button type="button" id="showReport" class="btn btn-primary">Show</button> -->
+			<!-- <!-- 					<button type="button" id="downLoadReport" class="btn btn-primary">Download</button> -->
+			-->
+			<!-- 				</div> -->
+			<!-- 				<hr/> -->
+			<!-- 			</div> -->
 			<div class="row">
-				<div class="form-inline">
-					<div class="form-group">
-						<label for="staticEmail2" class="col-form-label">Search by Date:</label> 
-					</div>
-					<div class="form-group">
-						<label for="from" class="col-form-label"> From</label> 
-						<input
-							type="date" class="form-control" id="from"
-							/>
-					</div>
-					<div class="form-group">
-						<label for="to" class="col-form-label">to</label> 
-						<input
-							type="date" class="form-control" id="to"
-							/>
-					</div>
-					
-					<button type="button" id="showReport" class="btn btn-primary">Show</button>
-					<button type="button" id="downLoadReport" class="btn btn-primary">Download</button>
-				</div>
-				<hr/>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Vendor</th>
+							<th>Candidate Name</th>
+							<th>BRM</th>
+							<th>SPOC</th>
+							<th>Team</th>
+							<th>Registered</th>
+							<th>Special skills</th>
+							<th>location</th>
+							<th>Last Changed</th>
+							<th>Last Status</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="candidate:${reportList}">
+							<td th:text="${candidate.vendor}">Mark</td>
+							<td th:text="${candidate.candidate_name}">Otto</td>
+							<td th:text="${candidate.brm}">@mdo</td>
+							<td th:text="${candidate.spoc}">@mdo</td>
+							<td th:text="${candidate.team}">@mdo</td>
+							<td th:text="${candidate.registerd}">@mdo</td>
+							<td th:text="${candidate.any_special_skill}">@mdo</td>
+							<td th:text="${candidate.location}">@mdo</td>
+							<td th:text="${candidate.changed_to}">@mdo</td>
+							<td th:text="${candidate.last_change_date}">@mdo</td>
+						</tr>
+
+
+					</tbody>
+				</table>
+
 			</div>
-			<div class="row" >
-		<table class="table">
-		  <thead>
-		    <tr>
-		      <th>Vendor</th>
-		      <th>Candidate Name</th>
-		      <th>BRM</th>
-		      <th>SPOC</th>
-		      <th>Team</th>
-		      <th>Registered</th>
-		      <th>Special skills</th>
-		      <th>location</th>
-		      <th>Last Changed</th>
-		      <th>Last Status</th>
-		    </tr>
-		  </thead>
-		  <tbody>
-		    <tr th:each="candidate:${reportList}" >
-		      <td th:text="${candidate.vendor}">Mark</td>
-		      <td th:text="${candidate.candidate_name}">Otto</td>
-		      <td th:text="${candidate.brm}">@mdo</td>
-		      <td th:text="${candidate.spoc}">@mdo</td>
-		      <td th:text="${candidate.team}">@mdo</td>
-		      <td th:text="${candidate.registerd}">@mdo</td>
-		      <td th:text="${candidate.any_special_skill}">@mdo</td>
-		      <td th:text="${candidate.location}">@mdo</td>
-		      <td th:text="${candidate.changed_to}">@mdo</td>
-		      <td th:text="${candidate.last_change_date}">@mdo</td>
-		    </tr>
-		    
-     
-		  </tbody>
-		</table>
-		
-	</div>
-</div>
+		</div>
 
 
 		<footer th:replace="layout/footer :: footer"></footer>
@@ -75,31 +77,32 @@
 
 </body>
 <script type="text/javascript">
-//<![CDATA[
-$(document).ready(
-		function(){
-			$('#showReport').click(function(){
-				var st=$('#from').val();
-				var to=$('#to').val();
-				var isStFound=st!='';
-				var isToFound=to!='';
-				if(st!=''){
-					$('#from').attr('style','border-color: #ccc');
-				}else{
-					$('#from').attr('style','border-color: red');
-				}
-				if(to!=''){
-					$('#to').attr('style','border-color: #ccc');
-				}else{
-					$('#to').attr('style','border-color: red');
-				}
-				if(isStFound && isToFound){
-					window.location
-					.replace('/reportByDate.html?start='+st+"&&end="+to);
-				}
+	//<![CDATA[
+	$(document).ready(
+			function() {
+				$('#showReport').click(
+						function() {
+							var st = $('#from').val();
+							var to = $('#to').val();
+							var isStFound = st != '';
+							var isToFound = to != '';
+							if (st != '') {
+								$('#from').attr('style', 'border-color: #ccc');
+							} else {
+								$('#from').attr('style', 'border-color: red');
+							}
+							if (to != '') {
+								$('#to').attr('style', 'border-color: #ccc');
+							} else {
+								$('#to').attr('style', 'border-color: red');
+							}
+							if (isStFound && isToFound) {
+								window.location
+										.replace('/reportByDate.html?start='
+												+ st + "&&end=" + to);
+							}
+						});
 			});
-		}
-		);
-//]]>
+	//]]>
 </script>
 </html>

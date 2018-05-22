@@ -49,6 +49,7 @@ public class ReportController {
 	
 	@RequestMapping(value="/report",method = RequestMethod.GET)
 	public String showReport(Model model,Principal p){
+		String user_name = p.getName();
 		try {
 			this.wrtieExcelFile();
 		} catch (FileNotFoundException e) {
@@ -66,7 +67,8 @@ public class ReportController {
 		System.out.println("role is:"+role.getName());
 		model.addAttribute("role", role);
 		
-		List<CandidateProfileReprot> reportList = candiateProfileService.getReport("brm@gmail.com");
+		
+		List<CandidateProfileReprot> reportList = candiateProfileService.getReport(user_name);
 		model.addAttribute("reportList", reportList);
 		return REPORT;
 	}
@@ -75,8 +77,8 @@ public class ReportController {
 	@SuppressWarnings("resource")
 	@RequestMapping(value="/report_download",method = RequestMethod.GET)
 	@ResponseStatus(value=HttpStatus.OK)
-	public HttpEntity<byte[]> downloadExcelReport(HttpServletResponse response) throws FileNotFoundException {
-		
+	public HttpEntity<byte[]> downloadExcelReport(HttpServletResponse response,Principal p) throws FileNotFoundException {
+		String user_name = p.getName();
 		 //Create blank workbook
 	      XSSFWorkbook workbook = new XSSFWorkbook();
 	      
@@ -86,7 +88,7 @@ public class ReportController {
 	      //Create row object
 	      XSSFRow row;
 
-	      List<CandidateProfileReprot> reportList = candiateProfileService.getReport("brm@gmail.com");
+	      List<CandidateProfileReprot> reportList = candiateProfileService.getReport(user_name);
 	      
 	      //This data needs to be written (Object[])
 	      Map < Integer, Object[] > empinfo = new TreeMap < Integer, Object[] >();
@@ -155,7 +157,7 @@ public class ReportController {
 
 	      HttpHeaders header = new HttpHeaders();
 	      header.setContentType(new MediaType("application", "vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
-	      header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=my_file.xlsx");
+	      header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=report.xlsx");
 	      header.setContentLength(excelContent.length);
 
 	      System.out.println("Writesheet.xlsx written successfully");
